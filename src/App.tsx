@@ -19,10 +19,19 @@ function App() {
 
   return (
     <>
-      <h1>fhevmjs</h1>
+      <h1>IRM.xyz</h1>
+      <p className="credits">
+        <a href="https://www.vrona.io"> developed by VRONA.</a>
+        </p>
+      <p className="description">
+      Welcome to Intelligence Rights Management (IRM) - A demo based on fhEVM.<br/><br/>
+      This decentralized application (DApp) allows Officers and Operators of intelligence/military services to manage,<br/>
+      to modify sensitive data from different sources and for different corporations.<br/><br/>
+      Personals can securely store and transfer intelligence data, ensuring transparency, immutability, and traceability throughout the process.
+      </p>
       <Connect>{(account, provider) => <Devnet />}</Connect>
       <p className="read-the-docs">
-        <a href="https://docs.zama.ai/fhevm">See the documentation for more information</a>
+        <a href="https://docs.zama.ai/fhevm"> on ZAMA.AI's fhEVM - see the documentation.</a>
       </p>
     </>
   );

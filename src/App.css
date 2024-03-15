@@ -5,6 +5,10 @@
   text-align: center;
 }
 
+.credits{
+  color: rgb(51, 70, 65)
+}
+
 .read-the-docs {
-  color: #888;
+  color: #ed1717;
 }
