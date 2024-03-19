@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Devnet } from './components/Devnet';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
+
 import { init } from './fhevmjs';
 import './App.css';
-import { Connect } from './components/Connect';
+import { HomePage } from './pages/HomePage';
+import { Major } from './pages/Major';
+import { UMission } from './pages/UMission';
+import { DMission } from './pages/DMission';
+import { HMission } from './pages/HMission';
 
 function App() {
   const [isInitialized, setIsInitialized] = useState(false);
@@ -18,23 +23,21 @@ function App() {
   if (!isInitialized) return null;
 
   return (
-    <>
-      <h1>IRM.xyz</h1>
-      <p className="credits">
-        <a href="https://www.vrona.io"> developed by VRONA.</a>
-        </p>
-      <p className="description">
-      Welcome to Intelligence Rights Management (IRM) - A demo based on fhEVM.<br/><br/>
-      This decentralized application (DApp) allows Officers and Operators of intelligence/military services to manage,<br/>
-      to modify sensitive data from different sources and for different corporations.<br/><br/>
-      Personals can securely store and transfer intelligence data, ensuring transparency, immutability, and traceability throughout the process.
-      </p>
-      <Connect>{(account, provider) => <Devnet />}</Connect>
-      <p className="read-the-docs">
-        <a href="https://docs.zama.ai/fhevm"> on ZAMA.AI's fhEVM - see the documentation.</a>
-      </p>
-    </>
+    <Router>
+      <Routes>
+        
+        {/* Render each Route component individually */}
+        <Route path="/" element={<HomePage/>} />
+        <Route path="/major" element={<Major/>} />
+        <Route path="/umission" element={<UMission/>} />
+        <Route path="/dmission" element={<DMission/>} />
+        <Route path="/hmission" element={<HMission/>} />
+      <Route/>
+      </Routes>
+    </Router>
   );
 }
+
+
 
 export default App;

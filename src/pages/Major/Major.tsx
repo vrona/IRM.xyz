@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import { getInstance } from '../../fhevmjs';
+//import { useEffect, useState } from 'react';
+//import { getInstance } from '../../fhevmjs';
 
 import './Major.css';
 
-const toHexString = (bytes: Uint8Array) => bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
+//const toHexString = (bytes: Uint8Array) => bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
 
 export const Major = () => {
 //   const [encryption, setEncryption] = useState<Uint8Array>();
@@ -20,17 +20,20 @@ export const Major = () => {
 //   }, [instance]);
 
   return (
-    <div>
-      <dl>
-        <dt className="Major__title">Headquarter</dt>
-        <dd className="Major__dd">
+
+
+        <h1>Headquarter</h1>
+
+
+  );
+};
+
+/*
+<dd className="Major__dd">
           <pre className="Major__pre">{encryption && toHexString(encryption)}</pre>
         </dd>
         <dt className="Major__title">And this is a EIP-712 token</dt>
         <dd className="Major__dd">
           <pre className="Major__pre">{token && JSON.stringify(token.token)}</pre>
         </dd>
-      </dl>
-    </div>
-  );
-};
+*/

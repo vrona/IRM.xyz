@@ -133,7 +133,7 @@ export const Connect: React.FC<{
     <div className="Connect__info">
       {!connected && (
         <button className="Connect__button" onClick={connect}>
-          Connect your wallet
+          ID Recognition
         </button>
       )}
       {connected && <div className="Connect__account">Connected with {account}</div>}
