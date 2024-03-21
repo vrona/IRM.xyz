@@ -1,6 +1,7 @@
 
-import { Connect } from '/Volumes/vrona_SSD/IRM.xyz/src/components/Connect';
-import { Devnet } from '/Volumes/vrona_SSD/IRM.xyz/src/components/Devnet';
+import { Connect } from '../../components/Connect';
+//import { Major } from '../Major';
+//import { Devnet } from '../../components/Devnet';
 
 export const HomePage = () => {
     return (
@@ -15,10 +16,15 @@ export const HomePage = () => {
       to modify sensitive data from different sources and for different corporations.<br/><br/>
       Personals can securely store and transfer intelligence data, ensuring transparency, immutability, and traceability throughout the process.
       </p>
-      <Connect>{(account, provider) => <Devnet />}</Connect>
+      <Connect>{() => null}</Connect>
       <p className="read-the-docs">
         <a href="https://docs.zama.ai/fhevm"> see fhEVM's documentation.</a>
       </p>
     </>
   );
 }
+
+/*
+<Connect>{(account, provider) => <Major />}</Connect>
+<Connect>{(account, provider) => <Devnet />}</Connect>
+*/

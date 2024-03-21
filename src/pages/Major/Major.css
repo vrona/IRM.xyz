@@ -1,12 +1,93 @@
-.Major__dd {
+.form-container {
+    width: 300px;
     margin: 0;
+    display: inline-block;
+    /* Change display property to inline-block */
+    position: absolute;
+    /* Position absolutely */
+    top: 10px;
+    left: 0;
+    /* Align to the left of the screen */
 }
 
-.Major__pre {
-    white-space: break-spaces;
-    word-wrap: break-word;
+/* Style form groups */
+.form-group {
+    margin-bottom: 1rem;
+    /* Add space between form groups */
 }
 
-.Major__title {
-    font-weight: bold;
+.mod-container {
+    position: absolute;
+    /* Position absolutely */
+    bottom: 10px;
+    left: 20px;
+    /* Add styles for the modification container */
+}
+
+.mod-group {
+    width: 100%;
+    /* Adjust width as needed */
+    /*margin: 0 auto;*/
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+input[type="text"] {
+    flex: 1;
+    /* Let the input grow to fill available space */
+    margin-right: 10px;
+    /* Add margin between input and button */
+}
+
+input,
+select {
+    flex: 1;
+}
+/* Style labels */
+label {
+    display: block;
+    /* Display labels as block elements */
+    margin-bottom: 0.5rem;
+    /* Add space below labels */
+    margin-right: 10px;
+}
+
+/* Style text inputs */
+input[type="text"],
+select {
+    width: 110px;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+
+
+.create-operation-button {
+    background-color: #4f5b68;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.create-operation-button:hover {
+    background-color: #0056b3;
+}
+
+/* Style for Add/Modify button */
+.add-modify-button {
+    margin-left: 10px;
+    background-color: #4f5b68;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+}
+
+.add-modify-button:hover {
+    background-color: #0056b3;
 }
