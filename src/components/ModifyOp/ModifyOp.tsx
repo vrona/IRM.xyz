@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { getInstance } from '../../fhevmjs';
 
 import { JsonRpcProvider } from 'ethers/providers';
-import { Connect } from '../../components/Connect'; // Import Connect component
 import { callContractMethod } from '../../services/OpContractService'
+import './ModifyOp.css';
 
 enum SecretClassification {
   Confidential,
@@ -11,9 +11,31 @@ enum SecretClassification {
   TopSecret
 }
 
+enum OperationActive {
+  Inactive,
+  StandBy,
+  Active
+}
 
-export const ModifyOp: React.FC = () => {
-   const setSecretClass = async (opTokenId: number, opSecretClass: SecretClassification, provider: JsonRpcProvider) => {
+interface ModifyOpProps {
+  provider: JsonRpcProvider;
+}
+export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
+  const [opTokenId, inputOpTokenId] = useState<number>();
+  const [secretClassification, optionSecretClassification] = useState<SecretClassification>(SecretClassification.Confidential);
+  const [commanderName, inputCommanderName] = useState<string>('');
+  const [linkReport, inputlinkReport] = useState<string>('');
+  const [startDate, inputstartDate] = useState<number>();
+  const [sourceCollection, inputsourceCollection] = useState<number>();
+  const [opActivation, optionOpActivation] = useState<OperationActive>(OperationActive.Inactive);
+
+  /* NEEDS TO DISPLAY CONTENT OF OPERATION STRUCT FROM BLOCKCHAIN
+  const getOperationData = async (opTokenId: number, provider: JsonRpcProvider) => {
+    await callContractMethod('getMetaOperation', [opTokenId], provider, 'Operation data return successfully!', 'Error return Operation Data:');
+  };
+  */
+
+  const setSecretClass = async (opSecretClass: SecretClassification, provider: JsonRpcProvider) => { //opTokenId: number, 
     await callContractMethod('secretClass', [opTokenId, opSecretClass], provider, 'Secret level modified successfully!', 'Error secret level modification:');
   };
 
@@ -33,38 +55,30 @@ export const ModifyOp: React.FC = () => {
     await callContractMethod('sourceCollection', [opTokenId, collectionOfSources], provider, 'Operation Sources Collection successfully!', 'Error operation sources Collection modification:');
   };
 
-  const setOpActivation = async (opTokenId: number, active: number, provider: JsonRpcProvider) =>{
+  const setOpActivation = async (active: number, provider: JsonRpcProvider) =>{ //opTokenId: number, 
     await callContractMethod('opActive', [opTokenId, active], provider, 'Operation start successfully!', 'Error operation Start Date modification:');
   };
 
   return (
-    <Connect>
-      {(account: string, provider: JsonRpcProvider) => (
-        <div>
         <div className ="mod-container">
          <h2>Modify Operation</h2>
           <form id="mod-form">
+
             <div className ="mod-group">
               <label htmlFor="opName">Operation ID</label>
-              <input type="text" id="opID" name="opID" />
-              <button type="submit" className='add-modify-button'>Submit</button>
-            </div>
-            <div className ="mod-group">
-              <label htmlFor="opName">Operation Name</label>
-              <input type="text" id="opName" name="opName" />
-              <button type="submit" className='add-modify-button'>Add/Modify</button>
+              <input type="number" id="opID" name="opID" value={opTokenId} onChange={(e) => inputOpTokenId(Number(e.target.value))}/>
+              <button type="submit" className='add-modify-button' onClick={() => opTokenId}>Submit</button>
             </div>
 
             <div className ="mod-group">
               <label htmlFor="opSecretClass">Secret Classification</label>
-              <select id="opSecretClass" name="opSecretClass">
+              <select id="opSecretClass" name="opSecretClass" value={secretClassification} onChange={(e) => optionSecretClassification(Number(e.target.value) as SecretClassification)}>
                   <option value={SecretClassification.Confidential}>Confidential</option>
                   <option value={SecretClassification.Secret}>Secret</option>
                   <option value={SecretClassification.TopSecret}>Top Secret</option>
                 </select>
-              <button type="submit" className='add-modify-button'>Add/Modify</button>
+              <button type="submit" className='add-modify-button'  onClick={() => setSecretClass(secretClassification, provider)}>Add/Modify</button>
             </div>
-
 
             <div className ="mod-group">
               <label htmlFor="commander">Commander</label>
@@ -91,15 +105,15 @@ export const ModifyOp: React.FC = () => {
             </div>
 
             <div className ="mod-group">
-              <label htmlFor="opactive">Op Activation</label>
-              <input type="text" id="opactive" name="opactive" />
-              <button type="submit" className='add-modify-button'>Add/Modify</button>
+              <label htmlFor="opactive">Operation Activation</label>
+              <select id="opactive" name="opactive" value={opActivation} onChange={(e) => optionOpActivation(Number(e.target.value) as OperationActive)}>
+                  <option value={OperationActive.Inactive}>Inactive</option>
+                  <option value={OperationActive.StandBy}>StandBy</option>
+                  <option value={OperationActive.Active}>Active</option>
+                </select>
+              <button type="submit" className='add-modify-button'  onClick={() => setOpActivation(opActivation, provider)}>Add/Modify</button>
             </div>
-
           </form>
           </div>
-        </div>
-      )}
-    </Connect>
   );
 }

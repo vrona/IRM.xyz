@@ -226,6 +226,25 @@
     "inputs": [
       {
         "indexed": true,
+        "internalType": "uint256",
+        "name": "_opTokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "string",
+        "name": "opName",
+        "type": "string"
+      }
+    ],
+    "name": "OpCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
         "internalType": "bytes32",
         "name": "role",
         "type": "bytes32"
@@ -392,7 +411,7 @@
         "type": "string"
       },
       {
-        "internalType": "enum IOp.SecretClassification",
+        "internalType": "enum IOperation.SecretClassification",
         "name": "opSecretClass",
         "type": "uint8"
       },
@@ -421,6 +440,77 @@
         "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "opTokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getMetaOperation",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "opTokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "enum IOperation.OpCreation",
+            "name": "existence",
+            "type": "uint8"
+          },
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "enum IOperation.SecretClassification",
+            "name": "secretclass",
+            "type": "uint8"
+          },
+          {
+            "internalType": "euint32",
+            "name": "operationKey",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "commandername",
+            "type": "string"
+          },
+          {
+            "internalType": "euint32",
+            "name": "startDate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "euint8",
+            "name": "operationActive",
+            "type": "uint256"
+          },
+          {
+            "internalType": "euint32",
+            "name": "collectionOfSources",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "linkOfReport",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct IOperation.OperationData",
+        "name": "",
+        "type": "tuple"
       }
     ],
     "stateMutability": "view",
@@ -742,9 +832,14 @@
         "internalType": "bytes32",
         "name": "_role",
         "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "_personnel",
+        "type": "address"
       }
     ],
-    "name": "setRoleAdmin",
+    "name": "setRank",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

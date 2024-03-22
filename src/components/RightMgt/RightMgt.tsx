@@ -1,10 +1,15 @@
+import { useEffect, useState } from 'react';
 import { JsonRpcProvider } from 'ethers/providers';
 import { ethers } from 'ethers'; // Import ethers.js library
 import RightMgtABI from './irmrightsabi.json'; // Import ABI of your smart contract
 
+interface RightMgtProps {
+  provider: JsonRpcProvider;
+}
+
 export const callRightContractMethod = async (methodName: string, params: any[], provider: JsonRpcProvider, successMessage: string, errorMessage: string) => {
   const signer = await provider.getSigner();
-  const rightContractAddress = '0x9bDA0F4fFF1c15cBD8d20358c517A6a25205B9BF';
+  const rightContractAddress = '0x1861666D9d20B88Cb7bD245ea07FcD082E8Be03F';
   const contract = new ethers.Contract(rightContractAddress, RightMgtABI, signer);
 
   try {
@@ -16,7 +21,7 @@ export const callRightContractMethod = async (methodName: string, params: any[],
   }
 };
 
-export const RightMgt: React.FC = () => {
+export const RightMgt: React.FC<RightMgtProps> = ({provider}) => {
 
    const setAccred = async (_accreditation: number, _personnel: string, provider: JsonRpcProvider) => {
     await callRightContractMethod('setAccreditation', [_accreditation, _personnel], provider, 'Accreditation setted successfully!', 'Error Accreditation setted:');

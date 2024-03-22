@@ -16,9 +16,9 @@ export const Major: React.FC = () => {
         <Connect>
       {(account: string, provider: JsonRpcProvider) => (
         <div>
-          <CreateOp />
-          <ModifyOp />
-          <RightMgt />
+          <CreateOp provider={provider} /> 
+          <ModifyOp provider={provider} /> 
+          <RightMgt provider={provider} /> 
         </div>
       )}
     </Connect>
