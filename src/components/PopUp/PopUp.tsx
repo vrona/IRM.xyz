@@ -1,14 +1,21 @@
+import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import './popup.css';
 interface PopupProps {
   message: string;
+  onClose:() => void;
 }
 
-export const PopUp: React.FC<PopupProps> = ({ message }) => {
-  const displayPopup = () => {
-    toast.info(message);
-  };
+export const PopUp: React.FC<PopupProps> = ({ message, onClose }) => {
+  useEffect(() => {
+    toast.info(message, { onClose }); // Pass the onClose callback to close the popup
+  }, []);
 
-  return null;
+  return (
+  <div className="popup-container">
+    <p>{message}</p>
+    {/* Add any additional elements or buttons here */}
+  </div>
+  );
 };

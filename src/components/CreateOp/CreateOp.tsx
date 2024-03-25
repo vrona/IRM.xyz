@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 import { getInstance } from '../../fhevmjs';
-
-import { JsonRpcProvider } from 'ethers/providers';
+import { BrowserProvider, TransactionRequest } from 'ethers';
+//import { JsonRpcProvider } from 'ethers/providers';
 import { callContractMethod } from '../../services/OpContractService'
+import { Connect } from '../Connect';
+import { PopUp } from '../PopUp';
 import './CreateOp.css';
 
 interface CreateOpProps {
-  provider: JsonRpcProvider;
+  provider: BrowserProvider;
+   requestTransactionApproval: (transaction: TransactionRequest) => void;
 }
 enum SecretClassification {
   Confidential,
@@ -14,16 +17,45 @@ enum SecretClassification {
   TopSecret
 }
 
-export const CreateOp: React.FC<CreateOpProps> = ({provider}) => {
+export const CreateOp: React.FC<CreateOpProps> = () => {
   const [opNameValue, inputOpName] = useState<string>('');
   const [commanderNameValue, inputCommanderName] = useState<string>('');
   const [secretClassification, optionSecretClassification] = useState<SecretClassification>(SecretClassification.Confidential);
+  const [showPopup, setShowPopup] = useState<boolean>(false);
+  const [popupMessage, setPopupMessage] = useState<string>('');
 
-  const createOperation = async (opName: string, opSecretClass: SecretClassification, commander: string, provider: JsonRpcProvider) => {
-    await callContractMethod('createOperation', [opName, opSecretClass, commander], provider, 'Operation created successfully!', 'Error creating Operation:');
-  };
-
+  const createOperation = async (
+    opName: string,
+    opSecretClass: SecretClassification,
+    commander: string,
+    provider: BrowserProvider,
+     requestTransactionApproval: (transaction: TransactionRequest) => void
+    ) => {
+      try {
+      await callContractMethod({
+      methodName: 'createOperation',
+      params: [opName, opSecretClass, commander],
+      provider: provider,
+      requestTransactionApproval: requestTransactionApproval,
+      successCallback: (opTokenId: number, opName: string)  => {
+        setPopupMessage(`Operation Created, Remember >>> ID: ${opTokenId}, Name: ${opName}`);
+        setShowPopup(true);
+      },
+      errorCallback: (error) => {
+        setPopupMessage(`Failed to create operation. Please check the console for details.`);
+        setShowPopup(true);
+        console.error('Error creating operation:', error);
+      },
+    });
+  } catch (error) {
+    console.error('Error creating operation:', error);
+    // Optionally, handle error here
+  }
+};
+ 
   return (
+    <Connect>
+      {(account, provider, requestTransactionApproval) => (
           <div className ="form-container">
             <h2>Create Operation</h2>
             <form id="operation-form">
@@ -43,9 +75,11 @@ export const CreateOp: React.FC<CreateOpProps> = ({provider}) => {
                   <label htmlFor="commander">Commander Name</label>
                   <input type="text" id="commander" name="commander" value={commanderNameValue} onChange={(e) => inputCommanderName(String(e.target.value))}/>
               </div>
-            <button type="submit" className='create-operation-button'onClick={() => createOperation(opNameValue, secretClassification, commanderNameValue, provider)}>Create Operation</button>
+            <button type="button" className='create-operation-button' onClick={() => createOperation(opNameValue, secretClassification, commanderNameValue, provider, requestTransactionApproval)}>Create Operation</button>
             </form>
-          </div>     
-
-        );
+            {showPopup && <PopUp message={popupMessage} onClose={() => setShowPopup(false)} />}
+          </div>
+        )}
+      </Connect>
+  )
 }
