@@ -65,9 +65,9 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
           <form id="mod-form">
 
             <div className ="mod-group">
-              <label htmlFor="opName">Operation ID</label>
+              <label htmlFor="opID">Operation ID</label>
               <input type="number" id="opID" name="opID" value={opTokenId} onChange={(e) => inputOpTokenId(Number(e.target.value))}/>
-              <button type="submit" className='add-modify-button' onClick={() => opTokenId}>Submit</button>
+              <button type="button" className='add-modify-button' onClick={() => opTokenId}>Submit</button>
             </div>
 
             <div className ="mod-group">
@@ -77,31 +77,31 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
                   <option value={SecretClassification.Secret}>Secret</option>
                   <option value={SecretClassification.TopSecret}>Top Secret</option>
                 </select>
-              <button type="submit" className='add-modify-button'  onClick={() => setSecretClass(secretClassification, provider)}>Add/Modify</button>
+              <button type="button" className='add-modify-button'  onClick={() => setSecretClass(secretClassification, provider)}>Add/Modify</button>
             </div>
 
             <div className ="mod-group">
               <label htmlFor="commander">Commander</label>
               <input type="text" id="commander" name="commander" />
-              <button type="submit" className='add-modify-button'>Add/Modify</button>
+              <button type="button" className='add-modify-button'>Add/Modify</button>
             </div>
 
             <div className ="mod-group">
               <label htmlFor="reportlink">Report Link</label>
               <input type="text" id="reportlink" name="reportlink" />
-              <button type="submit" className='add-modify-button'>Add/Modify</button>
+              <button type="button" className='add-modify-button'>Add/Modify</button>
             </div>
             
             <div className ="mod-group">
               <label htmlFor="startdate">Start Date</label>
               <input type="text" id="startdate" name="startdate" />
-              <button type="submit" className='add-modify-button'>Add/Modify</button>
+              <button type="button" className='add-modify-button'>Add/Modify</button>
             </div>
 
             <div className ="mod-group">
               <label htmlFor="sourcecollect">Source Collection</label>
               <input type="text" id="sourcecollect" name="sourcecollect" />
-              <button type="submit" className='add-modify-button'>Add/Modify</button>
+              <button type="button" className='add-modify-button'>Add/Modify</button>
             </div>
 
             <div className ="mod-group">
@@ -111,7 +111,7 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
                   <option value={OperationActive.StandBy}>StandBy</option>
                   <option value={OperationActive.Active}>Active</option>
                 </select>
-              <button type="submit" className='add-modify-button'  onClick={() => setOpActivation(opActivation, provider)}>Add/Modify</button>
+              <button type="button" className='add-modify-button'  onClick={() => setOpActivation(opActivation, provider)}>Add/Modify</button>
             </div>
           </form>
           </div>

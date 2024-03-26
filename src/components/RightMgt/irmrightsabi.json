@@ -149,24 +149,6 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "_desiredRank",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "address",
-        "name": "_candidate",
-        "type": "address"
-      }
-    ],
-    "name": "grantNewRank",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
         "name": "role",
         "type": "bytes32"
       },
@@ -296,17 +278,12 @@
   {
     "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "_accreditation",
-        "type": "bytes32"
-      },
-      {
         "internalType": "address",
         "name": "_personnel",
         "type": "address"
       }
     ],
-    "name": "setAccreditation",
+    "name": "setConfidentialAcc",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -314,12 +291,64 @@
   {
     "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "_role",
-        "type": "bytes32"
+        "internalType": "address",
+        "name": "_personnel",
+        "type": "address"
       }
     ],
-    "name": "setRoleAdmin",
+    "name": "setMajorRank",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_personnel",
+        "type": "address"
+      }
+    ],
+    "name": "setOfficerRank",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_personnel",
+        "type": "address"
+      }
+    ],
+    "name": "setOperatorRank",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_personnel",
+        "type": "address"
+      }
+    ],
+    "name": "setSecretAcc",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_personnel",
+        "type": "address"
+      }
+    ],
+    "name": "setTopSecretAcc",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

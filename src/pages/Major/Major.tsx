@@ -15,12 +15,11 @@ export const Major: React.FC = () => {
         <Connect>
       {(account: string, provider: BrowserProvider, requestTransactionApproval: (transaction: TransactionRequest) => void) =>(
         <div>
-          <CreateOp provider={provider} requestTransactionApproval={requestTransactionApproval} />
-
+          <RightMgt provider={provider} /> 
         </div>
       )}
     </Connect>
   );
 }
           // <ModifyOp provider={provider} /> 
-          // <RightMgt provider={provider} /> 
+          //<CreateOp provider={provider} requestTransactionApproval={requestTransactionApproval} />

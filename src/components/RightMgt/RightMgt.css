@@ -1,0 +1,71 @@
+/* Update the container position */
+.rightmgt {
+
+
+    width: 500px;
+    /* Add margin to the top */
+    margin-top: 20px;
+    /* Adjust width as needed */
+}
+
+/* Style the button group */
+.button-group {
+    margin-bottom: 1rem;
+}
+
+/* Style text inputs and labels */
+.input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.input-group label {
+    margin-right: 10px;
+}
+
+/* Style labels */
+label {
+    display: block;
+    /* Display labels as block elements */
+    margin-bottom: 0.5rem;
+    /* Add space below labels */
+    margin-right: 10px;
+}
+
+.input-group input[type="string"] {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Style the set accreditation button */
+.set-acc-button {
+    background-color: #4f5b68;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+}
+
+.set-acc-button:hover {
+    background-color: #681dda;
+}
+
+/* Style the set accreditation button */
+.set-rank-button {
+    background-color: #334558;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+}
+
+.set-rank-button:hover {
+    background-color: #e04b1d;
+}

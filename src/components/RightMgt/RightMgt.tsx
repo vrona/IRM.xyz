@@ -1,15 +1,26 @@
 import { useEffect, useState } from 'react';
-import { JsonRpcProvider } from 'ethers/providers';
+import { BrowserProvider, TransactionRequest } from 'ethers';
 import { ethers } from 'ethers'; // Import ethers.js library
 import RightMgtABI from './irmrightsabi.json'; // Import ABI of your smart contract
-
+import './RightMgt.css';
 interface RightMgtProps {
-  provider: JsonRpcProvider;
+  provider: BrowserProvider;
 }
 
-export const callRightContractMethod = async (methodName: string, params: any[], provider: JsonRpcProvider, successMessage: string, errorMessage: string) => {
+// Define the isAddress function
+function isAddress(address: string): boolean {
+  try {
+    ethers.getAddress(address);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+
+export const callRightContractMethod = async (methodName: string, params: any[], provider: BrowserProvider, successMessage: string, errorMessage: string) => {
   const signer = await provider.getSigner();
-  const rightContractAddress = '0x1861666D9d20B88Cb7bD245ea07FcD082E8Be03F';
+  const rightContractAddress = '0x1DEe0eaC29342f0865Ac865e4e48e2Fecf5A9305';
   const contract = new ethers.Contract(rightContractAddress, RightMgtABI, signer);
 
   try {
@@ -21,24 +32,111 @@ export const callRightContractMethod = async (methodName: string, params: any[],
   }
 };
 
-export const RightMgt: React.FC<RightMgtProps> = ({provider}) => {
+export const RightMgt: React.FC<RightMgtProps> = ({ provider }) => {
+  const [add_pers_conf, input_conf] = useState<string>('');
+  const [add_pers_sec, input_sec] = useState<string>('');
+  const [add_pers_tosec, input_tosec] = useState<string>('');
+  const [add_majorrank, inputadd_majorank] = useState<string>('');
+  const [add_officerank, inputadd_officerank] = useState<string>('');
+  const [add_operarank, inputadd_operank] = useState<string>('');
 
-   const setAccred = async (_accreditation: number, _personnel: string, provider: JsonRpcProvider) => {
-    await callRightContractMethod('setAccreditation', [_accreditation, _personnel], provider, 'Accreditation setted successfully!', 'Error Accreditation setted:');
+  const setConfidentialAcc = async (_personnel: string, provider: BrowserProvider) => {
+    if (!isAddress(_personnel)) {
+      alert('Invalid Ethereum address');
+      return;
+    }
+    await callRightContractMethod('setConfidentialAcc', [_personnel], provider, 'Confidential Accreditation set successfully!', 'Error setting Confidential Accreditation:');
   };
 
-  const setRole = async (role: number, provider: JsonRpcProvider) => {
-    await callRightContractMethod('setRoleAdmin', [role], provider, 'Role setted successfully!', 'Error Role setted:');
+  const setSecretAcc = async (_personnel: string, provider: BrowserProvider) => {
+    if (!isAddress(_personnel)) {
+      alert('Invalid Ethereum address');
+      return;
+    }
+    await callRightContractMethod('setSecretAcc', [_personnel], provider, 'Secret Accreditation set successfully!', 'Error setting Secret Accreditation:');
   };
 
-  const setRank = async (_desiredRank: number, _candidate: string, provider: JsonRpcProvider) => {
-    await callRightContractMethod('grantNewRank', [_desiredRank, _candidate], provider, 'Rank setted successfully!', 'Error Rank setted:');
+  const setTopSecretAcc = async (_personnel: string, provider: BrowserProvider) => {
+    if (!isAddress(_personnel)) {
+      alert('Invalid Ethereum address');
+      return;
+    }
+    await callRightContractMethod('setTopSecretAcc', [_personnel], provider, 'Top Secret Accreditation set successfully!', 'Error setting Top Secret Accreditation:');
   };
 
-  return(
-    <div>
-        <h1>RIGHTS MGT</h1>
+  const setMajorRank = async (_personnel: string, provider: BrowserProvider) => {
+    if (!isAddress(_personnel)) {
+      alert('Invalid Ethereum address');
+      return;
+    }
+    await callRightContractMethod('setMajorRank', [_personnel], provider, 'Major Rank set successfully!', 'Error setting Major Rank:');
+  };
 
+  const setOfficerRank = async (_personnel: string, provider: BrowserProvider) => {
+    if (!isAddress(_personnel)) {
+      alert('Invalid Ethereum address');
+      return;
+    }
+    await callRightContractMethod('setOfficerRank', [_personnel], provider, 'Officer Rank set successfully!', 'Error setting Officer Rank:');
+  };
+
+  const setOperatorRank = async (_personnel: string, provider: BrowserProvider) => {
+    if (!isAddress(_personnel)) {
+      alert('Invalid Ethereum address');
+      return;
+    }
+    await callRightContractMethod('setOperatorRank', [_personnel], provider, 'Operator Rank set successfully!', 'Error setting Operator Rank:');
+  };
+
+  return (
+              
+    <div className ="rightmgt">
+      <h2>RIGHTS MANAGEMENT</h2>
+      <form id="right-form">
+        <div className='title-part'>
+          <h4>Set Accreditation</h4>
+        </div>
+        
+        <div className ="button-group">
+          <label htmlFor="confAcc">Confidential</label>
+          <input type="string" id="confAcc" name="confAcc" value={add_pers_conf} onChange={(e) => input_conf(String(e.target.value))}/>
+          <button type="button" className='set-acc-button' onClick={() =>setConfidentialAcc(add_pers_conf, provider)}>Set Accreditation</button>
+        </div>
+
+        <div className ="button-group">
+          <label htmlFor="secAcc">Secret</label>
+          <input type="string" id="secAcc" name="secAcc" value={add_pers_sec} onChange={(e) => input_sec(String(e.target.value))}/>
+          <button type="button" className='set-acc-button' onClick={() => setSecretAcc(add_pers_sec, provider)}>Set Accreditation</button>
+        </div>
+
+        <div className ="button-group">
+          <label htmlFor="tosecAcc">Top Secret</label>
+          <input type="string" id="tosecAcc" name="tosecAcc" value={add_pers_tosec} onChange={(e) => input_tosec(String(e.target.value))}/>
+          <button type="button" className='set-acc-button' onClick={() => setTopSecretAcc(add_pers_tosec, provider)}>Set Accreditation</button>
+        </div>
+
+         <div className='title-part'>
+          <h4>Set Ranking</h4>
+        </div>
+
+        <div className ="button-group">
+          <label htmlFor="rankmajor">Major</label>
+          <input type="string" id="rankmajor" name="rankmajor" value={add_majorrank} onChange={(e) => inputadd_majorank(String(e.target.value))}/>
+          <button type="button" className='set-rank-button' onClick={() => setMajorRank(add_majorrank, provider)}>Set Ranking</button>
+        </div>
+
+                <div className ="button-group">
+          <label htmlFor="rankmofficer">Officer</label>
+          <input type="string" id="rankmofficer" name="rankmofficer" value={add_officerank} onChange={(e) => inputadd_officerank(String(e.target.value))}/>
+          <button type="button" className='set-rank-button' onClick={() => setOfficerRank(add_officerank, provider)}>Set Ranking</button>
+        </div>
+
+                <div className ="button-group">
+          <label htmlFor="rankoperator">Operator</label>
+          <input type="string" id="rankoperator" name="rankoperator" value={add_operarank} onChange={(e) => inputadd_operank(String(e.target.value))}/>
+          <button type="button" className='set-rank-button' onClick={() => setOperatorRank(add_operarank, provider)}>Set Ranking</button>
+        </div>
+      </form>
     </div>
-  )
+  );
 };

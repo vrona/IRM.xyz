@@ -1,6 +1,5 @@
 import { BrowserProvider, TransactionRequest } from 'ethers';
 import { ethers } from 'ethers'; // Import ethers.js library
-
 import OpFactoryABI from './opfactabi.json'; // Import ABI of your smart contract
 
 interface CallContractMethodParams {
@@ -24,9 +23,9 @@ export const callContractMethod = async ({
 }: CallContractMethodParams) => {
   
   try {
-  const signer = await provider.getSigner();
-  const opContractAddress = '0x299a751e37cc50732fedCAa142537D6A1161EeBA';
-  const contract = new ethers.Contract(opContractAddress, OpFactoryABI, signer);
+    const signer = await provider.getSigner();
+    const opContractAddress = '0x299a751e37cc50732fedCAa142537D6A1161EeBA';
+    const contract = new ethers.Contract(opContractAddress, OpFactoryABI, signer);
 
   
     const transaction = await contract[methodName](...params);
@@ -34,8 +33,10 @@ export const callContractMethod = async ({
       // Request transaction approval if available
     requestTransactionApproval({
         to: opContractAddress,
-        value: 0, // Example value, adjust as needed
+        value: 0.000000002, // Example value, adjust as needed
         data: transaction.data, // Include transaction data
+        gasLimit: 3000000,
+        gasPrice: ethers.parseUnits('1.5', 'gwei')
       });
 
       // Otherwise, proceed with the transaction without approval

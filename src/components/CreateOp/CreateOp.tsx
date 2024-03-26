@@ -44,11 +44,11 @@ export const CreateOp: React.FC<CreateOpProps> = () => {
       errorCallback: (error) => {
         setPopupMessage(`Failed to create operation. Please check the console for details.`);
         setShowPopup(true);
-        console.error('Error creating operation:', error);
+        console.error('ErrorCallBack creating operation:', error);
       },
     });
   } catch (error) {
-    console.error('Error creating operation:', error);
+    console.error('ErrorTry creating operation:', error);
     // Optionally, handle error here
   }
 };
