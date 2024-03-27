@@ -17,8 +17,15 @@ function isAddress(address: string): boolean {
   }
 }
 
+const factorizeFunc = async (_personnel: string, provider: BrowserProvider, successMess: string, errorMess: string) => {
+  if (!isAddress(_personnel)) {
+      alert('Invalid Ethereum address');
+      return;
+  }
+      await callRightContractMethod('setConfidentialAcc', [_personnel], provider, successMess, errorMess);
+  };
 
-export const callRightContractMethod = async (methodName: string, params: any[], provider: BrowserProvider, successMessage: string, errorMessage: string) => {
+const callRightContractMethod = async (methodName: string, params: any[], provider: BrowserProvider, successMessage: string, errorMessage: string) => {
   const signer = await provider.getSigner();
   const rightContractAddress = '0x1DEe0eaC29342f0865Ac865e4e48e2Fecf5A9305';
   const contract = new ethers.Contract(rightContractAddress, RightMgtABI, signer);
@@ -39,6 +46,74 @@ export const RightMgt: React.FC<RightMgtProps> = ({ provider }) => {
   const [add_majorrank, inputadd_majorank] = useState<string>('');
   const [add_officerank, inputadd_officerank] = useState<string>('');
   const [add_operarank, inputadd_operank] = useState<string>('');
+  const [accreditationType, setAccreditationType] = useState<string>('');
+  const [rankingType, setRankingType] = useState<string>('');
+
+  const handleSetAccreditation = async (personnel: string, provider: BrowserProvider) => {
+    if (!isAddress(personnel)) {
+      alert('Invalid Ethereum address');
+      return;
+    }
+
+    switch (accreditationType) {
+      case 'confidential':
+        await setConfidentialAcc(personnel, provider);
+        break;
+      case 'secret':
+        await setSecretAcc(personnel, provider);
+        break;
+      case 'topSecret':
+        await setTopSecretAcc(personnel, provider);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const getDesiredAccreditation = (): string => {
+    if (add_pers_conf !== '') {
+      return 'confidential';
+    } else if (add_pers_sec !== '') {
+      return 'secret';
+    } else if (add_pers_tosec !== '') {
+      return 'topSecret';
+    } else {
+      return ''; // No active accreditation
+    }
+  };
+
+  const handleSetRanking = async (personnel: string, provider: BrowserProvider) => {
+    if (!isAddress(personnel)) {
+      alert('Invalid Ethereum address');
+      return;
+    }
+
+    switch (rankingType) {
+      case 'major':
+        await setMajorRank(personnel, provider);
+        break;
+      case 'officer':
+        await setOfficerRank(personnel, provider);
+        break;
+      case 'operator':
+        await setOperatorRank(personnel, provider);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const getDesiredRanking = (): string => {
+    if (add_majorrank !== '') {
+      return 'major';
+    } else if (add_officerank !== '') {
+      return 'officer';
+    } else if (add_operarank !== '') {
+      return 'operator';
+    } else {
+      return ''; // No active accreditation
+    }
+  };
 
   const setConfidentialAcc = async (_personnel: string, provider: BrowserProvider) => {
     if (!isAddress(_personnel)) {
@@ -96,24 +171,23 @@ export const RightMgt: React.FC<RightMgtProps> = ({ provider }) => {
         <div className='title-part'>
           <h4>Set Accreditation</h4>
         </div>
-        
+
         <div className ="button-group">
           <label htmlFor="confAcc">Confidential</label>
-          <input type="string" id="confAcc" name="confAcc" value={add_pers_conf} onChange={(e) => input_conf(String(e.target.value))}/>
-          <button type="button" className='set-acc-button' onClick={() =>setConfidentialAcc(add_pers_conf, provider)}>Set Accreditation</button>
+          <input type="string" id="confAcc" name="confAcc" value={add_pers_conf} onChange={(e) => input_conf(String(e.target.value))} onFocus={() => setAccreditationType('confidential')} onBlur={() => setAccreditationType('')} placeholder="Add personnel ID"/>
         </div>
 
         <div className ="button-group">
           <label htmlFor="secAcc">Secret</label>
-          <input type="string" id="secAcc" name="secAcc" value={add_pers_sec} onChange={(e) => input_sec(String(e.target.value))}/>
-          <button type="button" className='set-acc-button' onClick={() => setSecretAcc(add_pers_sec, provider)}>Set Accreditation</button>
+          <input type="string" id="secAcc" name="secAcc" value={add_pers_sec} onChange={(e) => input_sec(String(e.target.value))} onFocus={() => setAccreditationType('secret')} onBlur={() => setAccreditationType('')} placeholder="Add personnel ID"/>
         </div>
 
         <div className ="button-group">
           <label htmlFor="tosecAcc">Top Secret</label>
-          <input type="string" id="tosecAcc" name="tosecAcc" value={add_pers_tosec} onChange={(e) => input_tosec(String(e.target.value))}/>
-          <button type="button" className='set-acc-button' onClick={() => setTopSecretAcc(add_pers_tosec, provider)}>Set Accreditation</button>
+          <input type="string" id="tosecAcc" name="tosecAcc" value={add_pers_tosec} onChange={(e) => input_tosec(String(e.target.value))} onFocus={() => setAccreditationType('topSecret')} onBlur={() => setAccreditationType('')} placeholder="Add personnel ID"/>
         </div>
+
+        <button type="button" className='set-acc-button' onClick={() => handleSetAccreditation(getDesiredAccreditation(), provider)}>Set Accreditation</button>
 
          <div className='title-part'>
           <h4>Set Ranking</h4>
@@ -121,21 +195,20 @@ export const RightMgt: React.FC<RightMgtProps> = ({ provider }) => {
 
         <div className ="button-group">
           <label htmlFor="rankmajor">Major</label>
-          <input type="string" id="rankmajor" name="rankmajor" value={add_majorrank} onChange={(e) => inputadd_majorank(String(e.target.value))}/>
-          <button type="button" className='set-rank-button' onClick={() => setMajorRank(add_majorrank, provider)}>Set Ranking</button>
+          <input type="string" id="rankmajor" name="rankmajor" value={add_majorrank} onChange={(e) => inputadd_majorank(String(e.target.value))} onFocus={() => setRankingType('major')} onBlur={() => setRankingType('')} placeholder="Add personnel ID"/>
         </div>
 
                 <div className ="button-group">
           <label htmlFor="rankmofficer">Officer</label>
-          <input type="string" id="rankmofficer" name="rankmofficer" value={add_officerank} onChange={(e) => inputadd_officerank(String(e.target.value))}/>
-          <button type="button" className='set-rank-button' onClick={() => setOfficerRank(add_officerank, provider)}>Set Ranking</button>
+          <input type="string" id="rankmofficer" name="rankmofficer" value={add_officerank} onChange={(e) => inputadd_officerank(String(e.target.value))} onFocus={() => setRankingType('officer')} onBlur={() => setRankingType('')} placeholder="Add personnel ID"/>
         </div>
 
                 <div className ="button-group">
           <label htmlFor="rankoperator">Operator</label>
-          <input type="string" id="rankoperator" name="rankoperator" value={add_operarank} onChange={(e) => inputadd_operank(String(e.target.value))}/>
-          <button type="button" className='set-rank-button' onClick={() => setOperatorRank(add_operarank, provider)}>Set Ranking</button>
+          <input type="string" id="rankoperator" name="rankoperator" value={add_operarank} onChange={(e) => inputadd_operank(String(e.target.value))} onFocus={() => setRankingType('operator')} onBlur={() => setRankingType('')} placeholder="Add personnel ID"/>
         </div>
+
+        <button type="button" className='set-rank-button' onClick={() => handleSetRanking(getDesiredRanking(), provider)}>Set Ranking</button>
       </form>
     </div>
   );

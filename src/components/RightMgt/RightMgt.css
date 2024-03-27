@@ -1,13 +1,14 @@
 /* Update the container position */
 .rightmgt {
-
-
     width: 500px;
     /* Add margin to the top */
     margin-top: 20px;
     /* Adjust width as needed */
 }
 
+.title-part {
+    margin-top: 40px;
+}
 /* Style the button group */
 .button-group {
     margin-bottom: 1rem;
@@ -26,9 +27,6 @@
 
 /* Style labels */
 label {
-    display: block;
-    /* Display labels as block elements */
-    margin-bottom: 0.5rem;
     /* Add space below labels */
     margin-right: 10px;
 }
@@ -36,34 +34,34 @@ label {
 .input-group input[type="string"] {
     flex: 1;
     padding: 0.5rem;
+    height: auto;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 8px;
+}
+
+/* Style the set accreditation button */
+.set-acc-button, .set-rank-button {
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    margin-left: 15px;
 }
 
 /* Style the set accreditation button */
 .set-acc-button {
     background-color: #4f5b68;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    padding: 0.5rem 1rem;
 }
 
-.set-acc-button:hover {
-    background-color: #681dda;
+.set-rank-button {
+    background-color: #334558;
 }
 
 /* Style the set accreditation button */
-.set-rank-button {
-    background-color: #334558;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    padding: 0.5rem 1rem;
+.set-acc-button:hover {
+    background-color: #681dda;
 }
 
 .set-rank-button:hover {
