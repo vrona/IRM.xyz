@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 import { getInstance } from '../../fhevmjs';
-import { BrowserProvider, TransactionRequest } from 'ethers';
+import { BrowserProvider, TransactionRequest, ethers } from 'ethers';
 //import { JsonRpcProvider } from 'ethers/providers';
-import { callContractMethod } from '../../services/OpContractService'
+import { callContractMethod } from '../../services/NewConCon'
 import { Connect } from '../Connect';
 import { PopUp } from '../PopUp';
 import './CreateOp.css';
 
 interface CreateOpProps {
   provider: BrowserProvider;
-   requestTransactionApproval: (transaction: TransactionRequest) => void;
 }
 enum SecretClassification {
   Confidential,
@@ -24,19 +23,26 @@ export const CreateOp: React.FC<CreateOpProps> = () => {
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [popupMessage, setPopupMessage] = useState<string>('');
 
+  const transactionOp: TransactionRequest = {
+  //to: rightContractAddress,
+  value: ethers.parseEther('0.006'), // Convert value to wei (example uses 0.000000002 ether)
+  //data: transaction.data, // Include transaction data
+  gasLimit: 3000000,
+  gasPrice: ethers.parseUnits('1.5', 'gwei') // Convert gas price to wei
+  };
+
   const createOperation = async (
     opName: string,
     opSecretClass: SecretClassification,
     commander: string,
     provider: BrowserProvider,
-     requestTransactionApproval: (transaction: TransactionRequest) => void
     ) => {
       try {
       await callContractMethod({
       methodName: 'createOperation',
       params: [opName, opSecretClass, commander],
       provider: provider,
-      requestTransactionApproval: requestTransactionApproval,
+      transactionOptions: transactionOp,
       successCallback: (opTokenId: number, opName: string)  => {
         setPopupMessage(`Operation Created, Remember >>> ID: ${opTokenId}, Name: ${opName}`);
         setShowPopup(true);
@@ -55,17 +61,20 @@ export const CreateOp: React.FC<CreateOpProps> = () => {
  
   return (
     <Connect>
-      {(account, provider, requestTransactionApproval) => (
+      {(account, provider) => (
           <div className ="form-container">
             <h2>Create Operation</h2>
             <form id="operation-form">
               <div className ="form-group">
                 <label htmlFor="opName">Operation Name</label>
-                <input type="text" id="opName" name="opName" value={opNameValue} onChange={(e) => inputOpName(String(e.target.value))}/>
+                <input type="text" id="opName" name="opName" value={opNameValue} onChange={(e) => {inputOpName(String(e.target.value)); console.log(e.target.value, typeof e.target.value);}}/>
               </div>
               <div className ="form-group">
                 <label htmlFor="opSecretClass">Secret Classification Level</label>
-                <select id="opSecretClass" name="opSecretClass" value={secretClassification} onChange={(e) => optionSecretClassification(Number(e.target.value) as SecretClassification)}>
+                <select id="opSecretClass" name="opSecretClass" value={secretClassification} onChange={(e) => {
+                  const selectedValue = e.target.value;
+                  const levelClassificationValue = parseInt(selectedValue,10);
+                  optionSecretClassification(levelClassificationValue as SecretClassification); console.log(levelClassificationValue, typeof levelClassificationValue)}}>
                     <option value={SecretClassification.Confidential}>Confidential</option>
                     <option value={SecretClassification.Secret}>Secret</option>
                     <option value={SecretClassification.TopSecret}>Top Secret</option>
@@ -73,9 +82,9 @@ export const CreateOp: React.FC<CreateOpProps> = () => {
               </div>
               <div className ="form-group">
                   <label htmlFor="commander">Commander Name</label>
-                  <input type="text" id="commander" name="commander" value={commanderNameValue} onChange={(e) => inputCommanderName(String(e.target.value))}/>
+                  <input type="text" id="commander" name="commander" value={commanderNameValue} onChange={(e) => {inputCommanderName(String(e.target.value)); console.log(e.target.value, typeof e.target.value);}}/>
               </div>
-            <button type="button" className='create-operation-button' onClick={() => createOperation(opNameValue, secretClassification, commanderNameValue, provider, requestTransactionApproval)}>Create Operation</button>
+            <button type="button" className='create-operation-button' onClick={() => createOperation(opNameValue, secretClassification, commanderNameValue, provider)}>Create Operation</button>
             </form>
             {showPopup && <PopUp message={popupMessage} onClose={() => setShowPopup(false)} />}
           </div>

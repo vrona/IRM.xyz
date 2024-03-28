@@ -6,38 +6,46 @@
     /* Adjust width as needed */
 }
 
-.title-part {
+.title-container {
+    text-align: center;
+    /* Center the content horizontally */
     margin-top: 40px;
+    /* Adjust margin-top as needed */
+    margin-bottom: 10px;
+    background-color: rgba(200, 200, 200, 0.3);
+    backdrop-filter: blur(5px);
+    border-radius: 8px;
+}
+
+.title-part {
+    color: #241e1e;
+    font-size: 0.95rem;
+    padding: 0.5rem;
 }
 /* Style the button group */
-.button-group {
-    margin-bottom: 1rem;
-}
-
-/* Style text inputs and labels */
 .input-group {
+    margin-bottom: 1rem;
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
-}
-
-.input-group label {
-    margin-right: 10px;
 }
 
 /* Style labels */
-label {
+.input-group label{
     /* Add space below labels */
-    margin-right: 10px;
+    flex-grow: 1;
+    margin-left: 130px;
+    color: #0e0c0c;
 }
 
-.input-group input[type="string"] {
-    flex: 1;
+.input-group input[type=text] {
+    flex-shrink: 0;
     padding: 0.5rem;
     height: auto;
     border: 1px solid #ccc;
     border-radius: 8px;
+    margin-right: 100px;
 }
+
 
 /* Style the set accreditation button */
 .set-acc-button, .set-rank-button {
@@ -48,22 +56,15 @@ label {
     font-size: 0.9rem;
     padding: 0.5rem 1rem;
     margin-left: 15px;
-}
-
-/* Style the set accreditation button */
-.set-acc-button {
-    background-color: #4f5b68;
-}
-
-.set-rank-button {
+    margin-bottom: 15px;
     background-color: #334558;
 }
 
 /* Style the set accreditation button */
 .set-acc-button:hover {
-    background-color: #681dda;
+    background-color: #2e1e45;
 }
 
 .set-rank-button:hover {
-    background-color: #e04b1d;
+    background-color: #2e1e45;
 }

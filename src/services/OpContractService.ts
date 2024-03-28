@@ -33,7 +33,7 @@ export const callContractMethod = async ({
       // Request transaction approval if available
     requestTransactionApproval({
         to: opContractAddress,
-        value: 0.000000002, // Example value, adjust as needed
+        value: 0.006, // Example value, adjust as needed
         data: transaction.data, // Include transaction data
         gasLimit: 3000000,
         gasPrice: ethers.parseUnits('1.5', 'gwei')
