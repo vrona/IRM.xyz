@@ -11,7 +11,7 @@ export const WhatHow = () => {
     return (
     <div>
       <h1 className='title-header'>
-        IRM</h1>
+        What/How</h1>
       <h2>Intelligentia - Vis - Honor - Resilio</h2>
       <p className="credits">
         developed by

@@ -18,8 +18,7 @@ export const PageRouter: React.FC<PageRouterProps> = () => {
 return(
       <Connect>
       {(account: string, provider: BrowserProvider) =>(
-      <Router>
-
+        
         <Routes>
         
           {/* Render each Route component individually */}
@@ -30,7 +29,6 @@ return(
           <Route path="/hmission" element={<HMission/>} />
           <Route path="/accdenied" element={<AskAccess/>} />
         </Routes>
-      </Router>
       
       )
       }
