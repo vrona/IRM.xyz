@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Connect } from '../Connect';
 import { BrowserProvider, TransactionRequest } from 'ethers';
 import { ethers } from 'ethers'; // Import ethers.js library
 import RightMgtABI from './irmrightsabi.json'; // Import ABI of your smart contract
@@ -26,7 +27,7 @@ const callRightContractMethod = async (
   ) => {
 
   const signer = await provider.getSigner();
-  const rightContractAddress = '0x1861666D9d20B88Cb7bD245ea07FcD082E8Be03F';
+  const rightContractAddress = '0x18Fd440998Fb2D1F23A82F39e08540945604b4fb' //local '0x1861666D9d20B88Cb7bD245ea07FcD082E8Be03F';
   const contract = new ethers.Contract(rightContractAddress, RightMgtABI, signer);
   
 
@@ -163,7 +164,8 @@ const setOperatorRank = async (_personnel: string, provider: BrowserProvider) =>
 };
 
   return (
-              
+    <Connect>
+      {(account, provider) => (   
     <div className ="rightmgt">
       <h2>RIGHTS MANAGEMENT</h2>
       <form id="right-form">
@@ -173,17 +175,20 @@ const setOperatorRank = async (_personnel: string, provider: BrowserProvider) =>
 
         <div className ="input-group">
           <label htmlFor="confAcc">Confidential</label>
-          <input type="text" id="confAcc" name="confAcc" value={add_pers_conf} onChange={(e) => input_conf(String(e.target.value))} onFocus={() => setAccreditationType('confidential')} onBlur={() => setAccreditationType('')} placeholder="Add personnel ID"/>
+          <input type="text" id="confAcc" name="confAcc" value={add_pers_conf}
+          onChange={(e) => input_conf(String(e.target.value))} onFocus={() => setAccreditationType('confidential')} onBlur={() => setAccreditationType('')} placeholder="Add personnel ID"/>
         </div>
 
         <div className ="input-group">
           <label htmlFor="secAcc">Secret</label>
-          <input type="text" id="secAcc" name="secAcc" value={add_pers_sec} onChange={(e) => input_sec(String(e.target.value))} onFocus={() => setAccreditationType('secret')} onBlur={() => setAccreditationType('')} placeholder="Add personnel ID"/>
+          <input type="text" id="secAcc" name="secAcc" value={add_pers_sec}
+          onChange={(e) => input_sec(String(e.target.value))} onFocus={() => setAccreditationType('secret')} onBlur={() => setAccreditationType('')} placeholder="Add personnel ID"/>
         </div>
 
         <div className ="input-group">
           <label htmlFor="tosecAcc">Top Secret</label>
-          <input type="text" id="tosecAcc" name="tosecAcc" value={add_pers_tosec} onChange={(e) => input_tosec(String(e.target.value))} onFocus={() => setAccreditationType('topSecret')} onBlur={() => setAccreditationType('')} placeholder="Add personnel ID"/>
+          <input type="text" id="tosecAcc" name="tosecAcc" value={add_pers_tosec}
+          onChange={(e) => input_tosec(String(e.target.value))} onFocus={() => setAccreditationType('topSecret')} onBlur={() => setAccreditationType('')} placeholder="Add personnel ID"/>
         </div>
 
         <button type="button" className='set-acc-button' onClick={() => handleSetAccreditation(provider)}>Set Accreditation</button>
@@ -194,22 +199,27 @@ const setOperatorRank = async (_personnel: string, provider: BrowserProvider) =>
 
         <div className ="input-group">
           <label htmlFor="rankmajor">Major</label>
-          <input type="text" id="rankmajor" name="rankmajor" value={add_majorrank} onChange={(e) => inputadd_majorank(String(e.target.value))} onFocus={() => setRankingType('major')} onBlur={() => setRankingType('')} placeholder="Add personnel ID"/>
+          <input type="text" id="rankmajor" name="rankmajor" value={add_majorrank}
+          onChange={(e) => inputadd_majorank(String(e.target.value))} onFocus={() => setRankingType('major')} onBlur={() => setRankingType('')} placeholder="Add personnel ID"/>
         </div>
 
                 <div className ="input-group">
           <label htmlFor="rankmofficer">Officer</label>
-          <input type="text" id="rankmofficer" name="rankmofficer" value={add_officerank} onChange={(e) => inputadd_officerank(String(e.target.value))} onFocus={() => setRankingType('officer')} onBlur={() => setRankingType('')} placeholder="Add personnel ID"/>
+          <input type="text" id="rankmofficer" name="rankmofficer" value={add_officerank}
+          onChange={(e) => inputadd_officerank(String(e.target.value))} onFocus={() => setRankingType('officer')} onBlur={() => setRankingType('')} placeholder="Add personnel ID"/>
         </div>
 
                 <div className ="input-group">
           <label htmlFor="rankoperator">Operator</label>
-          <input type="text" id="rankoperator" name="rankoperator" value={add_operarank} onChange={(e) => inputadd_operank(String(e.target.value))} onFocus={() => setRankingType('operator')} onBlur={() => setRankingType('')} placeholder="Add personnel ID"/>
+          <input type="text" id="rankoperator" name="rankoperator" value={add_operarank}
+          onChange={(e) => inputadd_operank(String(e.target.value))} onFocus={() => setRankingType('operator')} onBlur={() => setRankingType('')} placeholder="Add personnel ID"/>
         </div>
 
         <button type="button" className='set-rank-button' onClick={() => handleSetRanking(provider)}>Set Ranking</button>
         </div>
       </form>
     </div>
-  );
-};
+    )}
+  </Connect>
+  )
+}

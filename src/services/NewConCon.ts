@@ -24,7 +24,7 @@ export const callContractMethod = async ({
   
   
     const signer = await provider.getSigner();
-    const opContractAddress = '0x299a751e37cc50732fedCAa142537D6A1161EeBA';
+    const opContractAddress = '0xe2C8B3a458c140Dc126bDF25e5Ea21B2D06727bb' //local '0x299a751e37cc50732fedCAa142537D6A1161EeBA';
     const contract = new ethers.Contract(opContractAddress, OpFactoryABI, signer);
     const balance = await contract.balanceOf(signer.address);
     console.log(balance);

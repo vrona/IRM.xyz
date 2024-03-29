@@ -1,0 +1,26 @@
+#root {
+    box-sizing: border-box;
+    max-width: 90vw;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.title-header {
+    font-size: 106px;
+    /* Adjust the size as needed */
+}
+
+.credits {
+    color: #162051;
+}
+.credits a {
+    color: #fff;
+}
+
+.description {
+    color: #162051;
+}
+
+.read-the-docs a {
+    color: #fff;
+}

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { getInstance } from '../../fhevmjs';
 
 import { JsonRpcProvider } from 'ethers/providers';
-import { callContractMethod } from '../../services/OpContractService'
+import { callContractMethod } from '../../services/NewConCon'
 import './ModifyOp.css';
 
 enum SecretClassification {

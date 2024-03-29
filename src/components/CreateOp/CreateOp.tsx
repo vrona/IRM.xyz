@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getInstance } from '../../fhevmjs';
 import { BrowserProvider, TransactionRequest, ethers } from 'ethers';
-//import { JsonRpcProvider } from 'ethers/providers';
 import { callContractMethod } from '../../services/NewConCon'
 import { Connect } from '../Connect';
 import { PopUp } from '../PopUp';
@@ -19,7 +18,7 @@ enum SecretClassification {
 export const CreateOp: React.FC<CreateOpProps> = () => {
   const [opNameValue, inputOpName] = useState<string>('');
   const [commanderNameValue, inputCommanderName] = useState<string>('');
-  const [secretClassification, optionSecretClassification] = useState<SecretClassification>(SecretClassification.Confidential);
+  const [secretClassification, optionSecretClassification] = useState<SecretClassification| null>(null);
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [popupMessage, setPopupMessage] = useState<string>('');
 
@@ -67,14 +66,22 @@ export const CreateOp: React.FC<CreateOpProps> = () => {
             <form id="operation-form">
               <div className ="form-group">
                 <label htmlFor="opName">Operation Name</label>
-                <input type="text" id="opName" name="opName" value={opNameValue} onChange={(e) => {inputOpName(String(e.target.value)); console.log(e.target.value, typeof e.target.value);}}/>
+                <input type="text" id="opName" name="opName" value={opNameValue}
+                onChange={(e) => {inputOpName(String(e.target.value)); console.log(e.target.value, typeof e.target.value);}} placeholder="Type Op Name"/>
               </div>
               <div className ="form-group">
                 <label htmlFor="opSecretClass">Secret Classification Level</label>
-                <select id="opSecretClass" name="opSecretClass" value={secretClassification} onChange={(e) => {
+                <select id="opSecretClass" name="opSecretClass" value={secretClassification !== null ? secretClassification.toString():""}
+                onChange={(e) => {
                   const selectedValue = e.target.value;
-                  const levelClassificationValue = parseInt(selectedValue,10);
-                  optionSecretClassification(levelClassificationValue as SecretClassification); console.log(levelClassificationValue, typeof levelClassificationValue)}}>
+                    if (selectedValue === "") {
+                        optionSecretClassification(null);
+                      } else {
+                        optionSecretClassification(parseInt(selectedValue, 10) as SecretClassification);
+                        console.log(parseInt(selectedValue, 10), typeof parseInt(selectedValue, 10));
+                      }
+                    }}>
+                    <option value="" disabled>Choose level</option>
                     <option value={SecretClassification.Confidential}>Confidential</option>
                     <option value={SecretClassification.Secret}>Secret</option>
                     <option value={SecretClassification.TopSecret}>Top Secret</option>
@@ -82,9 +89,11 @@ export const CreateOp: React.FC<CreateOpProps> = () => {
               </div>
               <div className ="form-group">
                   <label htmlFor="commander">Commander Name</label>
-                  <input type="text" id="commander" name="commander" value={commanderNameValue} onChange={(e) => {inputCommanderName(String(e.target.value)); console.log(e.target.value, typeof e.target.value);}}/>
+                  <input type="text" id="commander" name="commander" value={commanderNameValue}
+                  onChange={(e) => {inputCommanderName(String(e.target.value)); console.log(e.target.value, typeof e.target.value);}} placeholder="Type Commander"/>
               </div>
-            <button type="button" className='create-operation-button' onClick={() => createOperation(opNameValue, secretClassification, commanderNameValue, provider)}>Create Operation</button>
+            <button type="button" className='create-operation-button' onClick={() => {
+              if (secretClassification !== null) {createOperation(opNameValue, secretClassification, commanderNameValue, provider)}}}>Create Operation</button>
             </form>
             {showPopup && <PopUp message={popupMessage} onClose={() => setShowPopup(false)} />}
           </div>
