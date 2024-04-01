@@ -36,8 +36,7 @@ function App() {
       
       {(account: string, provider: BrowserProvider) => (
         <Router>
-           {provider ? <Navigate to="/conn" /> : <Welcome />}
-          <Routes>
+        <Routes>
 
             <Route 
               path="/conn/*"
@@ -53,6 +52,9 @@ function App() {
 export default App;
 
 /*
+        <Router>
+           {provider ? <Navigate to="/conn" /> : <Welcome />}
+          <Routes>
           {!provider && <Route path="/" element={<Welcome />} />}
           {provider && <Navigate to="/conn" replace />}
 

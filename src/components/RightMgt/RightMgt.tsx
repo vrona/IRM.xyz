@@ -3,6 +3,8 @@ import { Connect } from '../Connect';
 import { BrowserProvider, TransactionRequest } from 'ethers';
 import { ethers } from 'ethers'; // Import ethers.js library
 import RightMgtABI from './irmrightsabi.json'; // Import ABI of your smart contract
+import { createTransaction } from '../../services/test/utils';
+
 import './RightMgt.css';
 interface RightMgtProps {
   provider: BrowserProvider;
@@ -27,22 +29,13 @@ const callRightContractMethod = async (
   ) => {
 
   const signer = await provider.getSigner();
-  const rightContractAddress = '0x18Fd440998Fb2D1F23A82F39e08540945604b4fb' //local '0x1861666D9d20B88Cb7bD245ea07FcD082E8Be03F';
+  const rightContractAddress = '0xF172c9CAF33682F32E08D46a90a4aB91eeC578D9' //local '0x1861666D9d20B88Cb7bD245ea07FcD082E8Be03F';
   const contract = new ethers.Contract(rightContractAddress, RightMgtABI, signer);
   
-
-  // Add createTransaction from blockchain back-end
-  const transactionOptions: TransactionRequest = {
-  //to: rightContractAddress,
-  value: ethers.parseEther('0.006'), // Convert value to wei (example uses 0.000000002 ether)
-  //data: transaction.data, // Include transaction data
-  gasLimit: 3000000,
-  gasPrice: ethers.parseUnits('1.5', 'gwei') // Convert gas price to wei
-  };
   
   try {
-    const transaction = await contract[methodName](...params, transactionOptions);
-    await transaction.wait();
+    const transaction = await createTransaction(contract[methodName],...params); //transactionOptions
+    await transaction.wait(1);
     alert(successMessage);
   } catch (error) {
     console.error(errorMessage, error);

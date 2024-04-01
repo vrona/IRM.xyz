@@ -23,7 +23,7 @@ return(
         
           {/* Render each Route component individually */}
           <Route path="/" element={<WhatHow/>} />
-          <Route path="/major/*" element={<Major path="/major" provider={provider} />} />
+          <Route path="/major/*" element={<Major path="/conn/major" provider={provider} />} />
           <Route path="/umission" element={<UMission/>} />
           <Route path="/dmission" element={<DMission/>} />
           <Route path="/hmission" element={<HMission/>} />

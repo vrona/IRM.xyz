@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { getInstance } from '../../fhevmjs';
-import { BrowserProvider, TransactionRequest, ethers } from 'ethers';
-import { callContractMethod } from '../../services/NewConCon'
+import { BrowserProvider, ethers, Log } from 'ethers';
 import { Connect } from '../Connect';
 import { PopUp } from '../PopUp';
+import OpFactoryABI from './opfactabi.json'; // Import ABI of your smart contract
+import { createTransaction } from '../../services/test/utils';
 import './CreateOp.css';
 
 interface CreateOpProps {
@@ -22,42 +23,63 @@ export const CreateOp: React.FC<CreateOpProps> = () => {
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [popupMessage, setPopupMessage] = useState<string>('');
 
-  const transactionOp: TransactionRequest = {
-  //to: rightContractAddress,
-  value: ethers.parseEther('0.006'), // Convert value to wei (example uses 0.000000002 ether)
-  //data: transaction.data, // Include transaction data
-  gasLimit: 3000000,
-  gasPrice: ethers.parseUnits('1.5', 'gwei') // Convert gas price to wei
-  };
+const callFactContractMethod = async (
+  methodName: string,
+  params: any[],
+  provider: BrowserProvider,
+  successMessage: string,
+  errorMessage: string
+  ) => {
 
-  const createOperation = async (
-    opName: string,
-    opSecretClass: SecretClassification,
-    commander: string,
-    provider: BrowserProvider,
-    ) => {
-      try {
-      await callContractMethod({
-      methodName: 'createOperation',
-      params: [opName, opSecretClass, commander],
-      provider: provider,
-      transactionOptions: transactionOp,
-      successCallback: (opTokenId: number, opName: string)  => {
-        setPopupMessage(`Operation Created, Remember >>> ID: ${opTokenId}, Name: ${opName}`);
-        setShowPopup(true);
-      },
-      errorCallback: (error) => {
-        setPopupMessage(`Failed to create operation. Please check the console for details.`);
-        setShowPopup(true);
-        console.error('ErrorCallBack creating operation:', error);
-      },
-    });
+ 
+  try {
+     const signer = await provider.getSigner();
+    const opFactoContractAddress = '0x9CD2ECC8751f8F1f4C1aeF9d09300B6489Bf1c78' //local '0x1861666D9d20B88Cb7bD245ea07FcD082E8Be03F';
+    const contract = new ethers.Contract(opFactoContractAddress, OpFactoryABI, signer);
+    const transactionOptions = {
+    gasLimit: 10000000,
+    }
+    const transaction = await contract[methodName](...params, transactionOptions);//await createTransaction(); //transactionOptions
+    //const transaction = await contract.getMetaOperation(0, transactionOptions);
+    //const transaction = await contract.createOperation(...params, transactionOptions);
+    //const transaction = await createTransaction(contract[methodName], ...params, transactionOptions);
+    const receipt = await transaction.wait(1);
+
+    // Get the logs from the transaction receipt
+    const logr = receipt.logs;
+    const _opTokenId = logr[2].topics[1];
+    const nameHex = logr[2].data;
+    
+    const hexWithoutPrefix = nameHex.startsWith('0x') ? nameHex.slice(2) : nameHex;
+
+    // Convert the hexadecimal string to a Uint8Array
+    const bytes = new Uint8Array(hexWithoutPrefix.match(/.{1,2}/g)!.map((byte:string) => parseInt(byte, 16)));
+
+    // Decode the Uint8Array into a string using UTF-8 encoding
+    const decoder = new TextDecoder('utf-8');
+    const readableString = decoder.decode(bytes);
+    const parsOpTokenId = parseInt(_opTokenId);
+    // Accessing the indexed parameters from the decoded data
+    console.log("Name ",readableString,"\n","OpToken ",parsOpTokenId)
+    alert(successMessage);
+    console.log(transaction)
   } catch (error) {
-    console.error('ErrorTry creating operation:', error);
-    // Optionally, handle error here
+    console.error(errorMessage, error);
+    alert(`${error}.`);
   }
 };
  
+const createOperation = async (
+  opName: string,
+    opSecretClass: SecretClassification,
+    commander: string,
+    provider: BrowserProvider) => {
+       await callFactContractMethod(
+        'createOperation',
+        [opName, opSecretClass, commander],
+        provider, 'Operation Created, Remember >>> ID',
+        'Failed to create operation. Please check the console for details.')
+    }
   return (
     <Connect>
       {(account, provider) => (
@@ -67,7 +89,7 @@ export const CreateOp: React.FC<CreateOpProps> = () => {
               <div className ="form-group">
                 <label htmlFor="opName">Operation Name</label>
                 <input type="text" id="opName" name="opName" value={opNameValue}
-                onChange={(e) => {inputOpName(String(e.target.value)); console.log(e.target.value, typeof e.target.value);}} placeholder="Type Op Name"/>
+                onChange={(e) => inputOpName(String(e.target.value))} placeholder="Type Op Name"/>
               </div>
               <div className ="form-group">
                 <label htmlFor="opSecretClass">Secret Classification Level</label>
@@ -78,7 +100,6 @@ export const CreateOp: React.FC<CreateOpProps> = () => {
                         optionSecretClassification(null);
                       } else {
                         optionSecretClassification(parseInt(selectedValue, 10) as SecretClassification);
-                        console.log(parseInt(selectedValue, 10), typeof parseInt(selectedValue, 10));
                       }
                     }}>
                     <option value="" disabled>Choose level</option>
@@ -90,10 +111,10 @@ export const CreateOp: React.FC<CreateOpProps> = () => {
               <div className ="form-group">
                   <label htmlFor="commander">Commander Name</label>
                   <input type="text" id="commander" name="commander" value={commanderNameValue}
-                  onChange={(e) => {inputCommanderName(String(e.target.value)); console.log(e.target.value, typeof e.target.value);}} placeholder="Type Commander"/>
+                  onChange={(e) => inputCommanderName(String(e.target.value))} placeholder="Type Commander"/>
               </div>
             <button type="button" className='create-operation-button' onClick={() => {
-              if (secretClassification !== null) {createOperation(opNameValue, secretClassification, commanderNameValue, provider)}}}>Create Operation</button>
+              if (secretClassification !== null) {createOperation(opNameValue, secretClassification, commanderNameValue, provider)} }}>Create Operation</button>
             </form>
             {showPopup && <PopUp message={popupMessage} onClose={() => setShowPopup(false)} />}
           </div>
