@@ -34,7 +34,7 @@ const callFactContractMethod = async (
  
   try {
      const signer = await provider.getSigner();
-    const opFactoContractAddress = '0x9CD2ECC8751f8F1f4C1aeF9d09300B6489Bf1c78' //local '0x1861666D9d20B88Cb7bD245ea07FcD082E8Be03F';
+    const opFactoContractAddress = '0xeD790C4cE953055A2b98938A764E0AD31Ce14164' //local '0x1861666D9d20B88Cb7bD245ea07FcD082E8Be03F';
     const contract = new ethers.Contract(opFactoContractAddress, OpFactoryABI, signer);
     const transactionOptions = {
     gasLimit: 10000000,

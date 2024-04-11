@@ -4,22 +4,25 @@ import OpFactoryABI from './opfactabi.json'; // Import ABI of your smart contrac
 import { createTransaction } from './test/utils';
 
 
-export const callRightContractMethod = async (
+export const callContractMethod = async (
   methodName: string,
   params: any[],
   provider: BrowserProvider,
+  contractAddress: string,
   successMessage: string,
   errorMessage: string
   ) => {
   
-  
-    const signer = await provider.getSigner();
-    const opContractAddress = '0xe2C8B3a458c140Dc126bDF25e5Ea21B2D06727bb' //local '0x299a751e37cc50732fedCAa142537D6A1161EeBA';
-    const contract = new ethers.Contract(opContractAddress, OpFactoryABI, signer);
-    
-
     try {
-    const transaction = await createTransaction(contract[methodName],...params);
+      const signer = await provider.getSigner();
+    const opContractAddress = contractAddress //local '0x299a751e37cc50732fedCAa142537D6A1161EeBA';
+    const contract = new ethers.Contract(opContractAddress, OpFactoryABI, signer);
+    const transactionOptions = {
+    gasLimit: 10000000,
+    }
+
+
+    const transaction = await contract[methodName](...params, transactionOptions);
     
       // Otherwise, proceed with the transaction without approval
     const receipt = await transaction.wait(1);
@@ -30,13 +33,10 @@ export const callRightContractMethod = async (
     ///const opName = receipt.events[1].topics[2];
     //console.log(opTokenId, opName);
 
-    const balance = await contract.balanceOf(signer.address);
-    console.log(balance);
-
     alert(successMessage);
   } catch (error) {
-    console.error('Error Inside NewConCon:', error);
-    alert(`Failed to ${errorMessage}. Please check the console for details.`);
+    console.error(errorMessage, error);
+    alert(`${error}.`);
   }
 };
 

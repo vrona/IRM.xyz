@@ -476,11 +476,6 @@
             "type": "uint256"
           },
           {
-            "internalType": "enum IOperation.OpCreation",
-            "name": "existence",
-            "type": "uint8"
-          },
-          {
             "internalType": "string",
             "name": "name",
             "type": "string"
@@ -491,23 +486,13 @@
             "type": "uint8"
           },
           {
-            "internalType": "euint32",
-            "name": "operationKey",
-            "type": "uint256"
-          },
-          {
             "internalType": "string",
             "name": "commandername",
             "type": "string"
           },
           {
             "internalType": "euint32",
-            "name": "startDate",
-            "type": "uint256"
-          },
-          {
-            "internalType": "euint8",
-            "name": "operationActive",
+            "name": "operationKey",
             "type": "uint256"
           },
           {
