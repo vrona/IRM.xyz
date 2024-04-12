@@ -1,5 +1,5 @@
 .opemodification {
-    width: 500px;
+    width: 600px;
 }
 
 .title-container {
@@ -27,11 +27,7 @@
 }
 
 .mod-grid {
-    display: grid;
     grid-template-columns: repeat(4, 1fr);
-    /* Define 4 columns with equal width */
-    grid-gap: 1rem;
-    /* Add gap between grid items */
 }
 
 .mod-row {
@@ -45,7 +41,7 @@
     align-items: center;
 }
 
-input,
+.input-group input,
 select {
     flex: 1;
 }
@@ -58,14 +54,7 @@ select {
 }
 
 /* Style text inputs */
-.input-group select {
-    width: 110px;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.input-group input[type=text] {
+.input-group input[type=text], input[type=number], select {
     flex-shrink: 0;
     padding: 0.5rem;
     height: auto;
@@ -75,16 +64,19 @@ select {
 }
 
 /* Style for Add/Modify button */
-.add-modify-button {
+.add-modify-button, .add-mod-unit-button {
 color: #fff;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-size: 0.9rem;
     padding: 0.5rem 1rem;
-    margin-left: 15px;
     margin-bottom: 15px;
     background-color: #334558;
+}
+
+.add-modify-button {
+    margin-left: 30px;
 }
 
 .add-modify-button:hover {

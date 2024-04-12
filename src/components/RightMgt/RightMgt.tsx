@@ -202,7 +202,7 @@ const setOperatorRank = async (_personnel: string, provider: BrowserProvider) =>
           onChange={(e) => inputadd_officerank(String(e.target.value))} onFocus={() => setRankingType('officer')} onBlur={() => setRankingType('')} placeholder="Add personnel ID"/>
         </div>
 
-                <div className ="input-group">
+        <div className ="input-group">
           <label htmlFor="rankoperator">Operator</label>
           <input type="text" id="rankoperator" name="rankoperator" value={add_operarank}
           onChange={(e) => inputadd_operank(String(e.target.value))} onFocus={() => setRankingType('operator')} onBlur={() => setRankingType('')} placeholder="Add personnel ID"/>

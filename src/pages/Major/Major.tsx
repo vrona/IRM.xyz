@@ -35,7 +35,7 @@ export const Major: React.FC<MajorProps> = ({ path }) => {
             )}
             {!path.endsWith('/modifop') && (
             <li>
-              <Link to={`${path}/modifop`}>Modify Operation</Link>
+              <Link to={`${path}/modifop`}>Operation Details</Link>
             </li>
             )}
           </ul>

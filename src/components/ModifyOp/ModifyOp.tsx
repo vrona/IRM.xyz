@@ -31,7 +31,8 @@ interface ModifyOpProps {
 }
 export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
   const [opTokenId, inputOpTokenId] = useState<number>();
-  const [secretClassification, optionSecretClassification] = useState<SecretClassification>(SecretClassification.Confidential);
+  const [opCodeActive, inputOpCodeActive] = useState<number>();
+  const [secretClassification, optionSecretClassification] = useState<SecretClassification| null>(null);
   const [commanderName, inputCommanderName] = useState<string>('');
   const [linkReport, inputlinkReport] = useState<string>('');
   const [startDate, inputstartDate] = useState<number>();
@@ -73,41 +74,26 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
     <Connect>
       {(account, provider) => (
         <div className ="opemodification">
-         <h2>Modify Operation</h2>
+         <h2>Operation Details</h2>
           <form id="modify-form">
 
            <div className="title-container">
             <h4 className="title-part">Operation</h4>
 
             <div className ="input-group">
-              <label htmlFor="opID">Insert OpID</label>
-              <input type="number" id="opID" name="opID" value={opTokenId} onChange={(e) => inputOpTokenId(Number(e.target.value))}/>
-              <button type="button" className='add-modify-button' onClick={() => opTokenId}>Submit</button>
+              <label htmlFor="opID">Operation ID</label>
+              <input type="number" id="opID" name="opID" value={opTokenId} onChange={(e) => inputOpTokenId(Number(e.target.value))} placeholder="Insert ID"/>
+              <button type="button" className='add-modify-button' onClick={() => opTokenId}>Save</button>
+            </div>
+            <div className ="input-group">
+              <label htmlFor="opCodeID">Secret Activation</label>
+              <input type="number" id="opCodeID" name="opCodeID" value={opCodeActive} onChange={(e) => inputOpCodeActive(Number(e.target.value))} placeholder="Insert Code"/>
+              <button type="button" className='add-modify-button' onClick={() => opCodeActive}>Activate</button>
             </div>
             </div>
             
             <div className="title-container">
-            <h4 className="title-part">Operation ID</h4>
-
-            <div className ="input-group">
-              <label htmlFor="opSecretClass">Secret Classification</label>
-              <select id="opSecretClass" name="opSecretClass" value={secretClassification} onChange={(e) => optionSecretClassification(Number(e.target.value) as SecretClassification)}>
-                  <option value={SecretClassification.Confidential}>Confidential</option>
-                  <option value={SecretClassification.Secret}>Secret</option>
-                  <option value={SecretClassification.TopSecret}>Top Secret</option>
-                </select>
-              <button type="button" className='add-modify-button'  onClick={() => setSecretClass(secretClassification, provider)}>Add/Modify</button>
-            </div>
-
-            <div className ="input-group">
-              <label htmlFor="commander">Commander</label>
-              <input type="text" id="commander" name="commander" />
-              <button type="button" className='add-modify-button'>Add/Modify</button>
-            </div>
-            </div>
-
-            <div className="title-container">
-            <h4 className="title-part">UNIT ENGAGED</h4>
+            <h4 className="title-part">Units Engaged</h4>
             <div className="mod-grid">
               {[0, 1, 2, 3].map(row => (
                 <div key={row} className="mod-row">
@@ -149,7 +135,36 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
                 </div>
               ))}
             </div>
-            <button type="button" className='add-modify-button'>Add/Modify</button>
+            <button type="button" className='add-mod-unit-button'>Save</button>
+            </div>
+
+            <div className="title-container">
+            <h4 className="title-part">Modification ONLY</h4>
+
+             <div className ="input-group">
+                <label htmlFor="opSecretClass">Secret Classification</label>
+                <select id="opSecretClass" name="opSecretClass" value={secretClassification !== null ? secretClassification.toString():""}
+                onChange={(e) => {
+                  const selectedValue = e.target.value;
+                    if (selectedValue === "") {
+                        optionSecretClassification(null);
+                      } else {
+                        optionSecretClassification(parseInt(selectedValue, 10) as SecretClassification);
+                      }
+                    }}>
+                    <option value="" disabled>Choose level</option>
+                    <option value={SecretClassification.Confidential}>Confidential</option>
+                    <option value={SecretClassification.Secret}>Secret</option>
+                    <option value={SecretClassification.TopSecret}>Top Secret</option>
+                  </select>
+                  <button type="button" className='add-modify-button'  onClick={() => {if (secretClassification !== null) setSecretClass(secretClassification, provider)}}>Save</button>
+              </div>
+
+            <div className ="input-group">
+              <label htmlFor="commander">Commander</label>
+              <input type="text" id="commander" name="commander" placeholder="Type Commander"/>
+              <button type="button" className='add-modify-button'>Save</button>
+            </div>
             </div>
 
         </form>
@@ -172,6 +187,6 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
 <div className ="input-group">
   <label htmlFor="reportlink">Report Link</label>
   <input type="text" id="reportlink" name="reportlink" />
-  <button type="button" className='add-modify-button'>Add/Modify</button>
+  <button type="button" className='add-modify-button'>Save</button>
 </div>
 */
