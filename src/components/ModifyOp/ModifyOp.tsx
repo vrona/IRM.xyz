@@ -13,17 +13,43 @@ enum SecretClassification {
   TopSecret
 }
 
-function hashSourceCollection(HUMINT: boolean, SIGINT: boolean, OSINT: boolean, GEOINT: boolean, MASINT: boolean, CYBINT: boolean, FININT: boolean, IMINT: boolean): number {
-  let optInsNumber = 0;
-  optInsNumber |= HUMINT ? 1 : 0;
-  optInsNumber |= SIGINT ? 1 << 1 : 0;
-  optInsNumber |= OSINT ? 1 << 2 : 0;
-  optInsNumber |= GEOINT ? 1 << 3 : 0;
-  optInsNumber |= MASINT ? 1 << 4 : 0;
-  optInsNumber |= CYBINT ? 1 << 5 : 0;
-  optInsNumber |= FININT ? 1 << 6 : 0;
-  optInsNumber |= IMINT ? 1 << 7 : 0;
-  return optInsNumber; // 8-bits
+interface IntelligenceMap {
+  [key: string]: number;
+}
+
+const intelligenceMap: IntelligenceMap = {
+  HUMINT: 0,
+  SIGINT: 1,
+  OSINT: 2,
+  GEOINT: 3,
+  MASINT: 4,
+  CYBINT: 5,
+  FININT: 6,
+  IMINT: 7
+};
+
+let currentHash = 0; // Initialize the hash outside the function
+
+async function hashSourceCollection(optedIn: { [key: string]: boolean }): Promise<number> {
+  // Reset the hash to zero before recalculating
+  currentHash = 0;
+
+  // Calculate the hash based on the current state of opt-ins
+  Object.keys(optedIn).forEach((key) => {
+
+    if (optedIn[key]) {
+      // Get the index/bit position for the current intelligence type
+      const index = intelligenceMap[key];
+      // If the option is opted-in, set the corresponding bit in the hash
+      if (index !== undefined) {
+        currentHash += 1 << index;
+      }
+    }
+  });
+
+  console.log("currentHash",currentHash)
+
+  return currentHash; // Return the accumulated hash
 }
 
 interface ModifyOpProps {
@@ -63,10 +89,10 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
     await callContractMethod('sourceCollection', [opTokenId, collectionOfSources],provider, contractAddress, 'Operation Sources Collection successfully!', 'Error operation sources Collection modification:');
   };
 
-  const handleOptInToggle = (optInName: string) => {
+  const handleOptInToggle = (optedInKey: string) => {
     setOptedIn((prevState) => ({
       ...prevState,
-      [optInName]: !prevState[optInName]
+      [optedInKey]: !prevState[optedInKey]
   }));
   };
 
@@ -109,21 +135,24 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
                             id={`optIn${index + 1}`}
                             name={`optIn${index + 1}`}
                             checked={optedIn[`optIn${index + 1}`] || false}
-                            onChange={() => {
-                              handleOptInToggle(`optIn${index + 1}`);
-                              if (!optedIn[`optIn${index + 1}`]) {
-                                const hash = hashSourceCollection(
-                                  label === 'HUMINT',
-                                  label === 'SIGINT',
-                                  label === 'OSINT',
-                                  label === 'GEOINT',
-                                  label === 'MASINT',
-                                  label === 'CYBINT',
-                                  label === 'FININT',
-                                  label === 'IMINT'
-                                );
-                                console.log(`Hash for ${label}:`, hash); // You can replace this with your logic to store the hash
-                              }
+                            onChange={async() => {
+                              const optInKey = `optIn${index + 1}`;
+                              handleOptInToggle(optInKey);
+                              //const optInValue = optedIn[optInKey]; // Get the current opt-in value
+                              //console.log(optInValue);
+                              const newOptedIn = { ...optedIn, [optInKey]: !optedIn[optInKey] };
+                              const hash = await hashSourceCollection({
+                                  HUMINT: newOptedIn.optIn1,
+                                  SIGINT: newOptedIn.optIn2,
+                                  OSINT: newOptedIn.optIn3,
+                                  GEOINT: newOptedIn.optIn4,
+                                  MASINT: newOptedIn.optIn5,
+                                  CYBINT: newOptedIn.optIn6,
+                                  FININT: newOptedIn.optIn7,
+                                  IMINT: newOptedIn.optIn8
+                              });
+                                console.log(`Hash all ${hash}:`); // You can replace this with your logic to store the hash
+                              //}
                             }}
                           />
                         </div>
@@ -164,6 +193,12 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
               <label htmlFor="commander">Commander</label>
               <input type="text" id="commander" name="commander" placeholder="Type Commander"/>
               <button type="button" className='add-modify-button'>Save</button>
+            </div>
+
+            <div className ="input-group">
+              <label htmlFor="transferOP">Transfer Operation</label>
+              <input type="text" id="transferOP" name="transferOP" placeholder="Add new Major ID"/>
+              <button type="button" className='add-modify-button'>Transfer</button>
             </div>
             </div>
 
