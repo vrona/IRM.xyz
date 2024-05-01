@@ -5,9 +5,9 @@ class EncryptEngine {
     algorithm = 'aes-256-cbc';
 
 
-public generateAESPrivateKey(): number {
+public async generateAESPrivateKey(): Promise<number> {
   // Generate 8 bytes (64 bits) of random data
-  const buffer = crypto.randomBytes(8);
+  const buffer = crypto.randomBytes(4);
   
   // Convert the buffer to a number
   const encryptionKey = buffer.readUInt32BE(0);
@@ -15,7 +15,7 @@ public generateAESPrivateKey(): number {
   return encryptionKey;
 }
 
-public encryptAES(data: string | number, key: number) {
+public async encryptFragmentAES(data: string | number, key: number): Promise<string> {
     const dataString = typeof data === 'number' ? String(data) : data;
     const privateKey = key.toString();
 
@@ -26,7 +26,7 @@ public encryptAES(data: string | number, key: number) {
     }
 
 // Function to decrypt AES encrypted data
-public decryptAES(encryptedData: string, key: string) {
+public async decryptFragmentAES(encryptedData: string, key: string): Promise<string> {
     const decipher = crypto.createDecipheriv(this.algorithm, key, Buffer.alloc(16, 0));
     let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
@@ -34,7 +34,7 @@ public decryptAES(encryptedData: string, key: string) {
     }
 
 
-public encryptAESFile(inputClearFilePath: string, outputCipherFilePath: string, key: number){
+public async encryptAESFile(inputClearFilePath: string, outputCipherFilePath: string, key: number){
     const inputStream = fs.createReadStream(inputClearFilePath);
     const outputStream = fs.createWriteStream(outputCipherFilePath);
     const privateKey = key.toString();
@@ -51,7 +51,7 @@ public encryptAESFile(inputClearFilePath: string, outputCipherFilePath: string, 
         });
     }
 
-public decryptAESFile(inputCipherFilePath: string, outputClearFilePath: string, key: number){
+public async decryptAESFile(inputCipherFilePath: string, outputClearFilePath: string, key: number){
     const privateKey = key.toString();
     const decipher = crypto.createDecipheriv(this.algorithm, privateKey, Buffer.alloc(16, 0));
     const inputStream = fs.createReadStream(inputCipherFilePath);
