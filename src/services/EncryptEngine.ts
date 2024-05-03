@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as crypto from 'crypto';
 
-class EncryptEngine {
+class EncryptAESEngine {
     algorithm = 'aes-256-cbc';
 
 
@@ -69,7 +69,7 @@ public async decryptAESFile(inputCipherFilePath: string, outputClearFilePath: st
     }
 }
 
-export default EncryptEngine;
+export default EncryptAESEngine;
 
 /* Example usage
 const encryptEngine = new EncryptEngine();

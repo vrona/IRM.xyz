@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { getInstance } from '../../fhevmjs';
 import { BrowserProvider, ethers, Log } from 'ethers';
 import { Connect } from '../Connect';
 import { PopUp } from '../PopUp';
 import OpFactoryABI from './opfactabi.json'; // Import ABI of your smart contract
-import { createTransaction } from '../../services/test/utils';
+import EncryptAESEngine from '../../services/EncryptEngine'
+//import { createTransaction } from '../../services/test/utils';
 import './CreateOp.css';
 
 interface CreateOpProps {
@@ -17,50 +18,94 @@ enum SecretClassification {
 }
 
 export const CreateOp: React.FC<CreateOpProps> = () => {
+  const opTokenIdRef = useRef<number | null>(null);
+  const opFactoContractAddress = '0xeD790C4cE953055A2b98938A764E0AD31Ce14164'; //local '0x1861666D9d20B88Cb7bD245ea07FcD082E8Be03F';
+  // to handle inputs from form
   const [opNameValue, inputOpName] = useState<string>('');
   const [commanderNameValue, inputCommanderName] = useState<string>('');
   const [secretClassification, optionSecretClassification] = useState<SecretClassification| null>(null);
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [popupMessage, setPopupMessage] = useState<string>('');
 
-const callFactContractMethod = async (
+  // to handle encryption of AESprivateKey
+  const [encryption, setEncryption] = useState<Uint8Array>();
+  //const [token, setToken] = useState<ReturnType<typeof instance.generateToken>>();
+  const instance = getInstance();
+
+  // initiate EncryptAESEngine class
+  const encryptAESEngine = new EncryptAESEngine()
+
+  // generate an AES privateKey and then encrypted by fhEVM client.
+  const encryptionPrivateKey = async (opTokenId: number, provider: BrowserProvider) => {
+    const privateKey = await encryptAESEngine.generateAESPrivateKey();
+        
+        setEncryption(instance.encrypt32(privateKey));
+        // setToken(instance.generateToken({
+        //   verifyingContract: opFactoContractAddress,})
+        // );
+
+      try {
+        await callFactContractMethod(
+        'opKey',
+        [opTokenId, encryption],
+        provider, 'Success of PrivateAESKey encryption',
+        'Failed to encrypt PrivateAESKey'
+      );
+    } catch(error) {
+      console.error('Error while calling contract inside encryptAES CreateOp', error);
+    }
+  };
+  useEffect(() => {  }, [instance])
+
+  // implementation of event parsing emit when new operation created
+  const operationFactoryEvent = async (receipt: any) => {
+    try{
+        // Get the logs from the transaction receipt
+        const logr = receipt.logs;
+        const _opTokenId = logr[2].topics[1];
+        const nameHex = logr[2].data;
+        
+        const hexWithoutPrefix = nameHex.startsWith('0x') ? nameHex.slice(2) : nameHex;
+
+        // Convert the hexadecimal string to a Uint8Array
+        const bytes = new Uint8Array(hexWithoutPrefix.match(/.{1,2}/g)!.map((byte:string) => parseInt(byte, 16)));
+
+        // Decode the Uint8Array into a string using UTF-8 encoding
+        const decoder = new TextDecoder('utf-8');
+        const readableString = decoder.decode(bytes);
+        opTokenIdRef.current  = parseInt(_opTokenId); // former parsOpTokenId
+        // Accessing the indexed parameters from the decoded data
+        console.log("Name ",readableString,"\n","OpToken ",opTokenIdRef.current)
+    
+      } catch(error) {
+      console.error('Error while listen to Create Op Event', error);
+    }
+
+  }
+  
+  // method to run a given method within a smart contract
+  const callFactContractMethod = async (
   methodName: string,
   params: any[],
   provider: BrowserProvider,
   successMessage: string,
   errorMessage: string
   ) => {
-
  
   try {
-     const signer = await provider.getSigner();
-    const opFactoContractAddress = '0xeD790C4cE953055A2b98938A764E0AD31Ce14164' //local '0x1861666D9d20B88Cb7bD245ea07FcD082E8Be03F';
+     
+    const signer = await provider.getSigner();
     const contract = new ethers.Contract(opFactoContractAddress, OpFactoryABI, signer);
     const transactionOptions = {
     gasLimit: 10000000,
     }
-    const transaction = await contract[methodName](...params, transactionOptions);//await createTransaction(); //transactionOptions
-    //const transaction = await contract.getMetaOperation(0, transactionOptions);
-    //const transaction = await contract.createOperation(...params, transactionOptions);
-    //const transaction = await createTransaction(contract[methodName], ...params, transactionOptions);
+    const transaction = await contract[methodName](...params, transactionOptions);
     const receipt = await transaction.wait(1);
+    console.log("Type Of:", typeof receipt);
 
-    // Get the logs from the transaction receipt
-    const logr = receipt.logs;
-    const _opTokenId = logr[2].topics[1];
-    const nameHex = logr[2].data;
-    
-    const hexWithoutPrefix = nameHex.startsWith('0x') ? nameHex.slice(2) : nameHex;
-
-    // Convert the hexadecimal string to a Uint8Array
-    const bytes = new Uint8Array(hexWithoutPrefix.match(/.{1,2}/g)!.map((byte:string) => parseInt(byte, 16)));
-
-    // Decode the Uint8Array into a string using UTF-8 encoding
-    const decoder = new TextDecoder('utf-8');
-    const readableString = decoder.decode(bytes);
-    const parsOpTokenId = parseInt(_opTokenId);
-    // Accessing the indexed parameters from the decoded data
-    console.log("Name ",readableString,"\n","OpToken ",parsOpTokenId)
+    if(methodName == 'createOperation'){
+      await operationFactoryEvent(receipt);
+    }
     alert(successMessage);
     console.log(transaction)
   } catch (error) {
@@ -68,7 +113,8 @@ const callFactContractMethod = async (
     alert(`${error}.`);
   }
 };
- 
+
+// create a new operation
 const createOperation = async (
   opName: string,
     opSecretClass: SecretClassification,
@@ -79,7 +125,12 @@ const createOperation = async (
         [opName, opSecretClass, commander],
         provider, 'Operation Created, Remember >>> ID',
         'Failed to create operation. Please check the console for details.')
+
+        if(opTokenIdRef.current !== null) {
+        await encryptionPrivateKey(opTokenIdRef.current, provider);
+        }
     }
+
   return (
     <Connect>
       {(account, provider) => (
