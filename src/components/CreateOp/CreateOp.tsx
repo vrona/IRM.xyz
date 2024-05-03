@@ -4,7 +4,7 @@ import { BrowserProvider, ethers, Log } from 'ethers';
 import { Connect } from '../Connect';
 import { PopUp } from '../PopUp';
 import OpFactoryABI from './opfactabi.json'; // Import ABI of your smart contract
-import EncryptAESEngine from '../../services/EncryptEngine'
+import EncryptAESEngine from '../../services/EngineAES'
 //import { createTransaction } from '../../services/test/utils';
 import './CreateOp.css';
 
@@ -38,11 +38,9 @@ export const CreateOp: React.FC<CreateOpProps> = () => {
   // generate an AES privateKey and then encrypted by fhEVM client.
   const encryptionPrivateKey = async (opTokenId: number, provider: BrowserProvider) => {
     const privateKey = await encryptAESEngine.generateAESPrivateKey();
-        
+        useEffect(() =>{
         setEncryption(instance.encrypt32(privateKey));
-        // setToken(instance.generateToken({
-        //   verifyingContract: opFactoContractAddress,})
-        // );
+        }, [instance, privateKey])
 
       try {
         await callFactContractMethod(
@@ -55,7 +53,6 @@ export const CreateOp: React.FC<CreateOpProps> = () => {
       console.error('Error while calling contract inside encryptAES CreateOp', error);
     }
   };
-  useEffect(() => {  }, [instance])
 
   // implementation of event parsing emit when new operation created
   const operationFactoryEvent = async (receipt: any) => {
