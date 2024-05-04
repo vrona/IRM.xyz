@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { getInstance } from '../../fhevmjs';
 import { Connect } from '../Connect';
 import { BrowserProvider } from 'ethers/providers';
@@ -59,11 +59,14 @@ interface ModifyOpProps {
 export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
   const [opTokenId, inputOpTokenId] = useState<number>();
   const [opCodeActive, inputOpCodeActive] = useState<number>();
+  const [optedIn, setOptedIn] = useState<{ [key: string]: boolean }>({});
+  const [unitengaged, inputUnitEngaged] = useState<number>();
+  const [addReport, inputAddReport] = useState<string>('');
+  // modifications only
   const [secretClassification, optionSecretClassification] = useState<SecretClassification| null>(null);
   const [commanderName, inputCommanderName] = useState<string>('');
-  const [unitengaged, inputUnitEngaged] = useState<number>();
-  const [linkReport, inputLinkReport] = useState<string>('');
-  const [optedIn, setOptedIn] = useState<{ [key: string]: boolean }>({});
+  const [transferCommand, inputTransferCommand] = useState<string>('');
+
 
    // to handle encryption of AESprivateKey
   const [encryption, setEncryption] = useState<Uint8Array>();
@@ -97,6 +100,25 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
         };
     };
 
+    const handleOptInToggle = (optedInKey: string) => {
+    setOptedIn((prevState) => ({
+      ...prevState,
+      [optedInKey]: !prevState[optedInKey]
+    }));
+    };
+
+      const setUnitsEngaged = async (opTokenId: number, unitengaged: number, provider: BrowserProvider) =>{
+    await callContractInteraction(
+      {
+      methodName:'storeUnitEngagement', 
+      params:[opTokenId, unitengaged],
+      provider: provider,
+      contractAddress: contractAddress,
+      contractABI: OpFactoryABI,
+      successMessage: 'Units engaged added successfully!',
+      errorMessage: 'Error adding units engaged:'});
+  };
+
   const setSecretClass = async (opTokenId: number, opSecretClass: SecretClassification, provider: BrowserProvider) => {
     await callContractInteraction({
       methodName:'secretClass', 
@@ -119,34 +141,28 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
       errorMessage: 'Error Commander name modification:'});
   };
 
+  const transferNewCommand = async (toAddress: string, opTokenId: number, provider: BrowserProvider) =>{
+    const fromAddress = (await provider.getSigner()).address;
+    await callContractInteraction({
+      methodName:'transferOperation', 
+      params:[fromAddress, toAddress, opTokenId],
+      provider: provider,
+      contractAddress: contractAddress,
+      contractABI: OpFactoryABI,
+      successMessage: 'Operation ownership transfered successfully!',
+      errorMessage: 'Error transfer operaton ownership:'});
+  };
+
+  // To store, we need to 1. get privateKey from Devnet, 2. decrypted it, 3.encrypt the files, 4.upload to IPFS, 5.get the path, 6. pass it to storingReport
   const storingReport = async (opTokenId: number, linkOfReport: string, provider: BrowserProvider) =>{
     await callContractInteraction({
-      methodName:'storeReports', 
+      methodName:'storeReports',
       params:[opTokenId, linkOfReport],
       provider: provider,
       contractAddress: contractAddress,
       contractABI: OpFactoryABI,
       successMessage: 'Report modified successfully!',
       errorMessage: 'Error Report link modification:'});
-  };
-  
-  const setUnitsEngaged = async (opTokenId: number, unitengaged: number, provider: BrowserProvider) =>{
-    await callContractInteraction(
-      {
-      methodName:'storeUnitEngagement', 
-      params:[opTokenId, unitengaged],
-      provider: provider,
-      contractAddress: contractAddress,
-      contractABI: OpFactoryABI,
-      successMessage: 'Units engaged added successfully!',
-      errorMessage: 'Error adding units engaged:'});
-  };
-
-  const handleOptInToggle = (optedInKey: string) => {
-    setOptedIn((prevState) => ({
-      ...prevState,
-      [optedInKey]: !prevState[optedInKey]
-  }));
   };
 
   return (
@@ -169,7 +185,13 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
               <input type="number" id="opCodeID" name="opCodeID" value={opCodeActive} onChange={(e) => inputOpCodeActive(Number(e.target.value))} placeholder="Insert Code"/>
               <button type="button" className='add-modify-button' onClick={() => {if (opTokenId !== undefined && opCodeActive !== undefined) secretActiveCode(opTokenId, opCodeActive, provider)}}>Activate</button>
             </div>
+            <div className ="input-group">
+              <label htmlFor="opReport">Add Report</label>
+              <input type="text" id="opReport" name="opReport" value={addReport} onChange={(e) => inputAddReport(String(e.target.value))} placeholder="Upload doc"/>
+              <button type="button" className='add-modify-button' onClick={() => {if (opTokenId !== undefined && addReport !== undefined) storingReport(opTokenId, addReport, provider)}}>Add</button>
             </div>
+            </div>
+        
             
             <div className="title-container">
             <h4 className="title-part">Units Engaged</h4>
@@ -252,8 +274,8 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
 
             <div className ="input-group">
               <label htmlFor="transferOP">Transfer Operation</label>
-              <input type="text" id="transferOP" name="transferOP" placeholder="Add new Major ID"/>
-              <button type="button" className='add-modify-button'>Transfer</button>
+              <input type="text" id="transferOP" name="transferOP" value={transferCommand} onChange={(e) => inputTransferCommand(String(e.target.value))} placeholder="Add new Major ID"/>
+              <button type="button" className='add-modify-button' onClick={() => {if (opTokenId !== undefined && transferCommand !== undefined) transferNewCommand(transferCommand, opTokenId, provider)}}>Transfer</button>
             </div>
             </div>
 
