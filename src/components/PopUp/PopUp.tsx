@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './popup.css';
+import './PopUp.css';
+
 interface PopupProps {
   message: string;
   onClose:() => void;

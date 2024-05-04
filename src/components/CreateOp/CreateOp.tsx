@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { getInstance } from '../../fhevmjs';
-import { BrowserProvider, ethers, Log } from 'ethers';
+import { BrowserProvider, ethers } from 'ethers';
 import { Connect } from '../Connect';
 import { PopUp } from '../PopUp';
 import OpFactoryABI from './opfactabi.json'; // Import ABI of your smart contract
@@ -34,6 +34,37 @@ export const CreateOp: React.FC<CreateOpProps> = () => {
 
   // initiate EncryptAESEngine class
   const encryptAESEngine = new EncryptAESEngine()
+
+    // method to run a given method within a smart contract
+  const callFactContractMethod = async (
+    methodName: string,
+    params: any[],
+    provider: BrowserProvider,
+    successMessage: string,
+    errorMessage: string
+    ) => {
+  
+    try {
+     
+    const signer = await provider.getSigner();
+    const contract = new ethers.Contract(opFactoContractAddress, OpFactoryABI, signer);
+    const transactionOptions = {
+    gasLimit: 10000000,
+    }
+    const transaction = await contract[methodName](...params, transactionOptions);
+    const receipt = await transaction.wait(1);
+    console.log("Type Of:", typeof receipt);
+
+    if(methodName == 'createOperation'){
+      await operationFactoryEvent(receipt);
+    }
+    alert(successMessage);
+    console.log(transaction)
+    } catch (error) {
+      console.error(errorMessage, error);
+      alert(`${error}.`);
+    }
+  };
 
   // generate an AES privateKey and then encrypted by fhEVM client.
   const encryptionPrivateKey = async (opTokenId: number, provider: BrowserProvider) => {
@@ -79,41 +110,10 @@ export const CreateOp: React.FC<CreateOpProps> = () => {
     }
 
   }
-  
-  // method to run a given method within a smart contract
-  const callFactContractMethod = async (
-  methodName: string,
-  params: any[],
-  provider: BrowserProvider,
-  successMessage: string,
-  errorMessage: string
-  ) => {
- 
-  try {
-     
-    const signer = await provider.getSigner();
-    const contract = new ethers.Contract(opFactoContractAddress, OpFactoryABI, signer);
-    const transactionOptions = {
-    gasLimit: 10000000,
-    }
-    const transaction = await contract[methodName](...params, transactionOptions);
-    const receipt = await transaction.wait(1);
-    console.log("Type Of:", typeof receipt);
-
-    if(methodName == 'createOperation'){
-      await operationFactoryEvent(receipt);
-    }
-    alert(successMessage);
-    console.log(transaction)
-  } catch (error) {
-    console.error(errorMessage, error);
-    alert(`${error}.`);
-  }
-};
 
 // create a new operation
 const createOperation = async (
-  opName: string,
+    opName: string,
     opSecretClass: SecretClassification,
     commander: string,
     provider: BrowserProvider) => {

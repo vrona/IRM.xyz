@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { getInstance } from '../../fhevmjs';
 import { Connect } from '../Connect';
 import { BrowserProvider } from 'ethers/providers';
-import { callContractMethod } from '../../services/NewConCon'
+import { callContractInteraction } from '../../services/HelperFunc'
+import OpFactoryABI from './../CreateOp/opfactabi.json'; 
 ///import { filesFromPaths } from 'files-from-path'
 
 import './ModifyOp.css';
@@ -60,33 +61,85 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
   const [opCodeActive, inputOpCodeActive] = useState<number>();
   const [secretClassification, optionSecretClassification] = useState<SecretClassification| null>(null);
   const [commanderName, inputCommanderName] = useState<string>('');
-  const [linkReport, inputlinkReport] = useState<string>('');
-  const [startDate, inputstartDate] = useState<number>();
-  const [sourceCollection, inputsourceCollection] = useState<number>();
+  const [unitengaged, inputUnitEngaged] = useState<number>();
+  const [linkReport, inputLinkReport] = useState<string>('');
   const [optedIn, setOptedIn] = useState<{ [key: string]: boolean }>({});
+
+   // to handle encryption of AESprivateKey
+  const [encryption, setEncryption] = useState<Uint8Array>();
+  //const [token, setToken] = useState<ReturnType<typeof instance.generateToken>>();
+  const instance = getInstance();
 
   /* NEEDS TO DISPLAY CONTENT OF OPERATION STRUCT FROM BLOCKCHAIN
   const getOperationData = async (opTokenId: number, provider: BrowserProvider) => {
-    await callContractMethod('getMetaOperation', [opTokenId], provider, 'Operation data return successfully!', 'Error return Operation Data:');
+    await callContractInteraction('getMetaOperation', [opTokenId], provider, 'Operation data return successfully!', 'Error return Operation Data:');
   };
   */
 
   const contractAddress = '0xeD790C4cE953055A2b98938A764E0AD31Ce14164';
 
-  const setSecretClass = async (opSecretClass: SecretClassification, provider: BrowserProvider) => { //opTokenId: number, 
-    await callContractMethod('secretClass', [opTokenId, opSecretClass], provider, contractAddress,'Secret level modified successfully!', 'Error secret level modification:');
+  const secretActiveCode = async (opTokenId: number, opSecretActiveCode: number, provider: BrowserProvider) => {
+    useEffect(() =>{
+        setEncryption(instance.encrypt16(opSecretActiveCode));
+        }, [instance, opSecretActiveCode])
+
+      try {
+        await callContractInteraction({
+          methodName:'opSecretActive', 
+          params:[opTokenId, encryption],
+          provider: provider,
+          contractAddress: contractAddress,
+          contractABI: OpFactoryABI,
+          successMessage: 'Secret Active Code well encrypted and stored!',
+          errorMessage: 'Error encrypting or storing secret active code'});
+        } catch (error){
+          console.error('Error running callContractInteraction for secretActiveCode', error)
+        };
+    };
+
+  const setSecretClass = async (opTokenId: number, opSecretClass: SecretClassification, provider: BrowserProvider) => {
+    await callContractInteraction({
+      methodName:'secretClass', 
+      params:[opTokenId, opSecretClass],
+      provider: provider,
+      contractAddress: contractAddress,
+      contractABI: OpFactoryABI,
+      successMessage: 'Secret level modified successfully!',
+      errorMessage: 'Error secret level modification:'});
   };
 
-  const setCommanderName = async (opTokenId: number, _commandOfficer: string, provider: BrowserProvider) =>{
-    await callContractMethod('commanderName', [opTokenId, _commandOfficer], provider, contractAddress,'Commander officer modified successfully!', 'Error Commander name modification:');
+  const setCommanderName = async (opTokenId: number, commandOfficer: string, provider: BrowserProvider) =>{
+    await callContractInteraction({
+      methodName:'commanderName', 
+      params:[opTokenId, commandOfficer],
+      provider: provider,
+      contractAddress: contractAddress,
+      contractABI: OpFactoryABI,
+      successMessage: 'Commander officer modified successfully!',
+      errorMessage: 'Error Commander name modification:'});
   };
 
-  const storingReport = async (opTokenId: number, _linkOfReport: string, provider: BrowserProvider) =>{
-    await callContractMethod('storeReports', [opTokenId, _linkOfReport], provider, contractAddress,'Report modified successfully!', 'Error Report link modification:');
+  const storingReport = async (opTokenId: number, linkOfReport: string, provider: BrowserProvider) =>{
+    await callContractInteraction({
+      methodName:'storeReports', 
+      params:[opTokenId, linkOfReport],
+      provider: provider,
+      contractAddress: contractAddress,
+      contractABI: OpFactoryABI,
+      successMessage: 'Report modified successfully!',
+      errorMessage: 'Error Report link modification:'});
   };
   
-  const setSourceCollection = async (opTokenId: number, collectionOfSources: number, provider: BrowserProvider) =>{
-    await callContractMethod('sourceCollection', [opTokenId, collectionOfSources],provider, contractAddress, 'Operation Sources Collection successfully!', 'Error operation sources Collection modification:');
+  const setUnitsEngaged = async (opTokenId: number, unitengaged: number, provider: BrowserProvider) =>{
+    await callContractInteraction(
+      {
+      methodName:'storeUnitEngagement', 
+      params:[opTokenId, unitengaged],
+      provider: provider,
+      contractAddress: contractAddress,
+      contractABI: OpFactoryABI,
+      successMessage: 'Units engaged added successfully!',
+      errorMessage: 'Error adding units engaged:'});
   };
 
   const handleOptInToggle = (optedInKey: string) => {
@@ -114,7 +167,7 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
             <div className ="input-group">
               <label htmlFor="opCodeID">Secret Activation</label>
               <input type="number" id="opCodeID" name="opCodeID" value={opCodeActive} onChange={(e) => inputOpCodeActive(Number(e.target.value))} placeholder="Insert Code"/>
-              <button type="button" className='add-modify-button' onClick={() => opCodeActive}>Activate</button>
+              <button type="button" className='add-modify-button' onClick={() => {if (opTokenId !== undefined && opCodeActive !== undefined) secretActiveCode(opTokenId, opCodeActive, provider)}}>Activate</button>
             </div>
             </div>
             
@@ -135,6 +188,7 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
                             id={`optIn${index + 1}`}
                             name={`optIn${index + 1}`}
                             checked={optedIn[`optIn${index + 1}`] || false}
+                            value={unitengaged}
                             onChange={async() => {
                               const optInKey = `optIn${index + 1}`;
                               handleOptInToggle(optInKey);
@@ -151,6 +205,7 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
                                   FININT: newOptedIn.optIn7,
                                   IMINT: newOptedIn.optIn8
                               });
+                                inputUnitEngaged(Number(hash))
                                 console.log(`Hash all ${hash}:`); // You can replace this with your logic to store the hash
                               //}
                             }}
@@ -164,7 +219,7 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
                 </div>
               ))}
             </div>
-            <button type="button" className='add-mod-unit-button'>Save</button>
+            <button type="button" className='add-mod-unit-button' onClick={() => {if (opTokenId !== undefined && unitengaged !== undefined) setUnitsEngaged(opTokenId, unitengaged, provider)}}>Save</button>
             </div>
 
             <div className="title-container">
@@ -186,13 +241,13 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
                     <option value={SecretClassification.Secret}>Secret</option>
                     <option value={SecretClassification.TopSecret}>Top Secret</option>
                   </select>
-                  <button type="button" className='add-modify-button'  onClick={() => {if (secretClassification !== null) setSecretClass(secretClassification, provider)}}>Save</button>
+                  <button type="button" className='add-modify-button'  onClick={() => {if (opTokenId !== undefined && secretClassification !== null) setSecretClass(opTokenId, secretClassification, provider)}}>Save</button>
               </div>
 
             <div className ="input-group">
               <label htmlFor="commander">Commander</label>
-              <input type="text" id="commander" name="commander" placeholder="Type Commander"/>
-              <button type="button" className='add-modify-button'>Save</button>
+              <input type="text" id="commander" name="commander" value={commanderName} onChange={(e) => inputCommanderName(String(e.target.value))} placeholder="Type Commander"/>
+              <button type="button" className='add-modify-button' onClick={() => {if (opTokenId !== undefined && commanderName !== undefined) setCommanderName(opTokenId, commanderName, provider)}}>Save</button>
             </div>
 
             <div className ="input-group">
