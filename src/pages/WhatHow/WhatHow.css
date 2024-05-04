@@ -17,8 +17,21 @@
     color: #fff;
 }
 
-.description {
+.what, .how {
+    text-align: left;
     color: #162051;
+}
+
+.what {
+    text-align: right;
+}
+
+.how {
+    text-align: left;
+}
+
+.how a {
+    color: #fff;
 }
 
 .read-the-docs a {

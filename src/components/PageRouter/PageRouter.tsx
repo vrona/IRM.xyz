@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import { BrowserProvider } from 'ethers';
 import { Connect } from '../Connect';
+import Welcome  from '../../pages/Welcome/Welcome';
 import { WhatHow } from '../../pages/WhatHow';
 import { AskAccess } from '../../pages/AskAccess';
 import { Major } from '../../pages/Major';
@@ -16,18 +17,20 @@ interface PageRouterProps {
 export const PageRouter: React.FC<PageRouterProps> = () => {
 
 return(
+                
       <Connect>
       {(account: string, provider: BrowserProvider) =>(
         
         <Routes>
         
           {/* Render each Route component individually */}
-          <Route path="/" element={<WhatHow/>} />
-          <Route path="/major/*" element={<Major path="/conn/major" provider={provider} />} />
-          <Route path="/umission" element={<UMission/>} />
-          <Route path="/dmission" element={<DMission/>} />
-          <Route path="/hmission" element={<HMission/>} />
-          <Route path="/accdenied" element={<AskAccess/>} />
+          <Route path="/"element={<Welcome />} />
+          <Route path="/conn" element={<WhatHow/>} />
+          <Route path="/conn/major/*" element={<Major path="/conn/major" provider={provider} />} />
+          <Route path="/conn/umission" element={<UMission/>} />
+          <Route path="/conn/dmission" element={<DMission/>} />
+          <Route path="/conn/hmission" element={<HMission/>} />
+          <Route path="/conn/accdenied" element={<AskAccess/>} />
         </Routes>
       
       )
