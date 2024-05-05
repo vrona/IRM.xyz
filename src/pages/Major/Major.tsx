@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { getInstance } from '../../fhevmjs';
+import React,{ useEffect, useState } from 'react';
 import { BrowserProvider } from 'ethers';
 import { Route, Routes, Link} from 'react-router-dom';
 import './Major.css';
@@ -22,23 +21,23 @@ export const Major: React.FC<MajorProps> = ({ path }) => {
 
       <div>
         <nav>
-          <ul>
+          <dt>
             {!path.endsWith('/rightsmgt') && (
-            <li>
+            <dd>
               <Link to={`${path}/rightsmgt`}>Rights Management</Link>
-            </li>
+            </dd>
              )}
              {!path.endsWith('/createop') && (
-            <li>
+            <dd>
               <Link to={`${path}/createop`}>Create Operation</Link>
-            </li>
+            </dd>
             )}
             {!path.endsWith('/modifop') && (
-            <li>
+            <dd>
               <Link to={`${path}/modifop`}>Operation Details</Link>
-            </li>
+            </dd>
             )}
-          </ul>
+          </dt>
         </nav>
 
         <Routes>
@@ -54,9 +53,9 @@ export const Major: React.FC<MajorProps> = ({ path }) => {
 
 /* 
 
-<li>
+<dd>
               <Link to="/modifyop">Modify Operation</Link>
-            </li>
+            </dd>
 <Route path="/modifyop">
   <ModifyOp provider={provider} /> 
 </Route>

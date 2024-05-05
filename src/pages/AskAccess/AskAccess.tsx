@@ -11,7 +11,9 @@ export const AskAccess = () => {
         Access Denied
         </h1>
         <p className="description">
-        No ranking detected -- Contact Major at HQ.
+        No ranking detected.<br/>
+        Major, please contact VRONA.<br/>
+        Officer, Operator, please contact your Major at HeadQuarter.
         </p>
       <Connect>{() => null}</Connect>
     </div>

@@ -4,6 +4,7 @@ import { BrowserProvider } from 'ethers';
 import { init } from './fhevmjs';
 import './App.css';
 import { Connect } from './components/Connect';
+import Welcome  from './pages/Welcome/Welcome';
 
 import { PageRouter } from './components/PageRouter'; 
 
@@ -14,6 +15,7 @@ interface AppProps {
 // function App() 
 function App() {
   const [isInitialized, setIsInitialized] = useState(false);
+  const [isConnected, setIsConnected] = useState<boolean>(false);
 
   useEffect(() => {
     init()
@@ -21,39 +23,43 @@ function App() {
         setIsInitialized(true);
       })
       .catch(() => setIsInitialized(false));
+
+      const eth = window.ethereum;
+    if (!eth) {
+      setIsConnected(false);
+      console.log('No wallet has been found');
+      
+    } else {
+      setIsConnected(true);
+      console.log('Wallet found');
+      
+    }
       
 
   }, []);
 
-
   if (!isInitialized) return null;
 
    return (
-
-    <Connect>
-      
-      {(account: string, provider: BrowserProvider) => (
-        <Router>
+      <Router>
         <Routes>
-
-            <Route             
-              path="/*" ///conn
-              element={<PageRouter provider={provider} />}
-            />
-          </Routes>
-        </Router>
-      )}
+        {!isConnected || (<Route path="/" element={<Welcome />} />)}
+        {isConnected && (<Route path="/conn/*" element={<PageRouter />}/>)}
+        </Routes>
+      </Router>
+    );}
      
-    </Connect>
-  );
-  }
 export default App;
 
-/*
+{/* /*
+    // <Connect>
+      
+    //   {(account: string, provider: BrowserProvider) => (
+           // </Connect> 
         <Router>
            {provider ? <Navigate to="/conn" /> : <Welcome />}
           <Routes>
           {!provider && <Route path="/" element={<Welcome />} />}
           {provider && <Navigate to="/conn" replace />}
 
-{!isConnect && <Route path="/" element={<Welcome />} />}*/
+{!isConnect && <Route path="/" element={<Welcome />} />}*/}

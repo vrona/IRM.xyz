@@ -12,7 +12,6 @@ export const WhatHow = () => {
     <div>
       <h1 className='title-header'>
         What/How</h1>
-
       
       <p className="what">
       <h3>WHAT</h3><b>Intelligence Rights Management</b> (IRM) <br/>
@@ -32,7 +31,7 @@ export const WhatHow = () => {
           <dd>: selects the different Intelligence Units (GeoInt, HumInt, ...) necessary to gather information for the success of the operation.</dd>
           <dd>: provides the operations' "Secret Active Code" to intelligence officer (recommanded method: in-person exchange).</dd>
           <dd>: uploads encrypted (AES encryption) reports.</dd>
-      </dt>
+        </dt>
       </dd><br/>
       <dd> Officer
         <dt>
@@ -40,16 +39,18 @@ export const WhatHow = () => {
           <dd>: stores, updates information, on dedicated Mission NFT (GeoInt, HumInt, ...), based on intelligence sources.<br/>
                 Mission NFT ownership can be transferred to Operator (on field), Officer (at HeadQuarter).</dd>
           <dd>: uploads encrypted content: video, picture, audio, reports.</dd>
-      </dt>
+          
+        </dt>
       </dd><br/>
       <dd> Operator
         <dt>
           <dd>: receives Mission NFT ownership from Officer.</dd>
           <dd>: updates the intelligence sources based on his/her achievements/observations during field mission.</dd>
           <dd>: downloads encrypted content from intelligence sources : video, picture, audio, reports.</dd>
-      </dt>
+        </dt>
       </dd>
       </dt>
+      <h3>Neither Officers, nor Operators are aware of the different intelligence units engaged. Only Major knows.</h3>
       </p>
 
     </div>
