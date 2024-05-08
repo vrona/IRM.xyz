@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import { BrowserProvider } from 'ethers';
 import { init } from './fhevmjs';
 import './App.css';
-import { Connect } from './components/Connect';
 import Welcome  from './pages/Welcome/Welcome';
 
 import { PageRouter } from './components/PageRouter'; 
