@@ -5,7 +5,7 @@ import { init } from './fhevmjs';
 import './App.css';
 import Welcome  from './pages/Welcome/Welcome';
 
-import { PageRouter } from './components/PageRouter'; 
+import { PageRouter } from './components/PageRouter';
 
 interface AppProps {
   provider: BrowserProvider;

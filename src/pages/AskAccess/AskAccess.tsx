@@ -15,7 +15,10 @@ export const AskAccess = () => {
         Major, please contact VRONA.<br/>
         Officer, Operator, please contact your Major at HeadQuarter.
         </p>
+
+      {/* <div className='connection'>
       <Connect>{() => null}</Connect>
+      </div> */}
     </div>
   );
 }
