@@ -1,13 +1,13 @@
 .opemodification {
     width: 600px;
+    display: inline-block;
 }
 
-.title-container {
+.optitle-container {
     text-align: center;
     /* Center the content horizontally */
-    margin-top: 40px;
-    /* Adjust margin-top as needed */
-    margin-bottom: 10px;
+    padding-bottom: 2px;
+    padding-right: 20px;
     background-color: rgba(200, 200, 200, 0.3);
     backdrop-filter: blur(5px);
     border-radius: 8px;
@@ -19,10 +19,12 @@
     padding: 0.5rem;
 }
 
-.input-group {
+.input-group-mod {
     /*margin: 0 auto;*/
     margin-bottom: 1rem;
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+        grid-gap: 1px;
     align-items: center;
 }
 
@@ -41,21 +43,17 @@
     align-items: center;
 }
 
-.input-group input,
-select {
-    flex: 1;
-}
-
 /* Style labels */
-.input-group label {
-    flex-grow: 1;
-    margin-left: 130px;
+.input-group-mod label {
+    flex-grow: 0.5;
+    /* margin-left: 130px; */
     color: #0e0c0c;
 }
 
 /* Style text inputs */
-.input-group input[type=text], input[type=number], select {
-    flex-shrink: 0;
+.input-group-mod input[type=text], input[type=number], select {
+    /* flex-shrink: 0; */
+    /* flex: 1; */
     padding: 0.5rem;
     height: auto;
     border: 1px solid #ccc;
@@ -63,21 +61,37 @@ select {
     margin-right: 100px;
 }
 
+
+
 /* Style for Add/Modify button */
-.add-modify-button, .add-mod-unit-button {
-color: #fff;
+.add-modify-button {
+    color: #fff;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-size: 0.9rem;
     padding: 0.5rem 1rem;
+ 
+
+    /* margin-right: 25px;
+    margin-bottom: 15px;
+    margin-left: 30px; */
+    background-color: #334558;
+
+}
+
+.add-mod-unit-button {
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    margin-left: 15px;
     margin-bottom: 15px;
     background-color: #334558;
 }
 
-.add-modify-button {
-    margin-left: 30px;
-}
 
 .add-modify-button:hover {
     background-color: #2e1e45;

@@ -163,22 +163,22 @@ const setOperatorRank = async (_personnel: string, provider: BrowserProvider) =>
       <h2>RIGHTS MANAGEMENT</h2>
       <form id="right-form">
         <div className="title-container">
-          <h4 className="title-part">ACCREDITATION</h4>
+          <h4 className="subtitle-part">ACCREDITATION</h4>
           
 
-        <div className ="input-group">
+        <div className ="input-group-right">
           <label htmlFor="confAcc">Confidential</label>
           <input type="text" id="confAcc" name="confAcc" value={add_pers_conf}
           onChange={(e) => input_conf(String(e.target.value))} onFocus={() => setAccreditationType('confidential')} onBlur={() => setAccreditationType('')} placeholder="Add personnel ID"/>
         </div>
 
-        <div className ="input-group">
+        <div className ="input-group-right">
           <label htmlFor="secAcc">Secret</label>
           <input type="text" id="secAcc" name="secAcc" value={add_pers_sec}
           onChange={(e) => input_sec(String(e.target.value))} onFocus={() => setAccreditationType('secret')} onBlur={() => setAccreditationType('')} placeholder="Add personnel ID"/>
         </div>
 
-        <div className ="input-group">
+        <div className ="input-group-right">
           <label htmlFor="tosecAcc">Top Secret</label>
           <input type="text" id="tosecAcc" name="tosecAcc" value={add_pers_tosec}
           onChange={(e) => input_tosec(String(e.target.value))} onFocus={() => setAccreditationType('topSecret')} onBlur={() => setAccreditationType('')} placeholder="Add personnel ID"/>
@@ -187,22 +187,22 @@ const setOperatorRank = async (_personnel: string, provider: BrowserProvider) =>
         <button type="button" className='set-acc-button' onClick={() => handleSetAccreditation(provider)}>Set Accreditation</button>
         </div>
         <div className="title-container">
-          <h4 className="title-part">RANKING</h4>
+          <h4 className="subtitle-part">RANKING</h4>
           
 
-        <div className ="input-group">
+        <div className ="input-group-right">
           <label htmlFor="rankmajor">Major</label>
           <input type="text" id="rankmajor" name="rankmajor" value={add_majorrank}
           onChange={(e) => inputadd_majorank(String(e.target.value))} onFocus={() => setRankingType('major')} onBlur={() => setRankingType('')} placeholder="Add personnel ID"/>
         </div>
 
-                <div className ="input-group">
+                <div className ="input-group-right">
           <label htmlFor="rankmofficer">Officer</label>
           <input type="text" id="rankmofficer" name="rankmofficer" value={add_officerank}
           onChange={(e) => inputadd_officerank(String(e.target.value))} onFocus={() => setRankingType('officer')} onBlur={() => setRankingType('')} placeholder="Add personnel ID"/>
         </div>
 
-        <div className ="input-group">
+        <div className ="input-group-right">
           <label htmlFor="rankoperator">Operator</label>
           <input type="text" id="rankoperator" name="rankoperator" value={add_operarank}
           onChange={(e) => inputadd_operank(String(e.target.value))} onFocus={() => setRankingType('operator')} onBlur={() => setRankingType('')} placeholder="Add personnel ID"/>

@@ -172,20 +172,20 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
          <h2>Operation Details</h2>
           <form id="modify-form">
 
-           <div className="title-container">
+           <div className="optitle-container">
             <h4 className="title-part">Operation</h4>
 
-            <div className ="input-group">
+            <div className ="input-group-mod">
               <label htmlFor="opID">Operation ID</label>
               <input type="number" id="opID" name="opID" value={opTokenId} onChange={(e) => inputOpTokenId(Number(e.target.value))} placeholder="Insert ID"/>
               <button type="button" className='add-modify-button' onClick={() => opTokenId}>Save</button>
             </div>
-            <div className ="input-group">
+            <div className ="input-group-mod">
               <label htmlFor="opCodeID">Secret Activation</label>
               <input type="number" id="opCodeID" name="opCodeID" value={opCodeActive} onChange={(e) => inputOpCodeActive(Number(e.target.value))} placeholder="Insert Code"/>
               <button type="button" className='add-modify-button' onClick={() => {if (opTokenId !== undefined && opCodeActive !== undefined) secretActiveCode(opTokenId, opCodeActive, provider)}}>Activate</button>
             </div>
-            <div className ="input-group">
+            <div className ="input-group-mod">
               <label htmlFor="opReport">Add Report</label>
               <input type="text" id="opReport" name="opReport" value={addReport} onChange={(e) => inputAddReport(String(e.target.value))} placeholder="Upload doc"/>
               <button type="button" className='add-modify-button' onClick={() => {if (opTokenId !== undefined && addReport !== undefined) storingReport(opTokenId, addReport, provider)}}>Add</button>
@@ -193,7 +193,7 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
             </div>
         
             
-            <div className="title-container">
+            <div className="optitle-container">
             <h4 className="title-part">Units Engaged</h4>
             <div className="mod-grid">
               {[0, 1, 2, 3].map(row => (
@@ -244,10 +244,10 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
             <button type="button" className='add-mod-unit-button' onClick={() => {if (opTokenId !== undefined && unitengaged !== undefined) setUnitsEngaged(opTokenId, unitengaged, provider)}}>Save</button>
             </div>
 
-            <div className="title-container">
+            <div className="optitle-container">
             <h4 className="title-part">Modification ONLY</h4>
 
-             <div className ="input-group">
+             <div className ="input-group-mod">
                 <label htmlFor="opSecretClass">Secret Classification</label>
                 <select id="opSecretClass" name="opSecretClass" value={secretClassification !== null ? secretClassification.toString():""}
                 onChange={(e) => {
@@ -266,13 +266,13 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
                   <button type="button" className='add-modify-button'  onClick={() => {if (opTokenId !== undefined && secretClassification !== null) setSecretClass(opTokenId, secretClassification, provider)}}>Save</button>
               </div>
 
-            <div className ="input-group">
+            <div className ="input-group-mod">
               <label htmlFor="commander">Commander</label>
               <input type="text" id="commander" name="commander" value={commanderName} onChange={(e) => inputCommanderName(String(e.target.value))} placeholder="Type Commander"/>
               <button type="button" className='add-modify-button' onClick={() => {if (opTokenId !== undefined && commanderName !== undefined) setCommanderName(opTokenId, commanderName, provider)}}>Save</button>
             </div>
 
-            <div className ="input-group">
+            <div className ="input-group-mod">
               <label htmlFor="transferOP">Transfer Operation</label>
               <input type="text" id="transferOP" name="transferOP" value={transferCommand} onChange={(e) => inputTransferCommand(String(e.target.value))} placeholder="Add new Major ID"/>
               <button type="button" className='add-modify-button' onClick={() => {if (opTokenId !== undefined && transferCommand !== undefined) transferNewCommand(transferCommand, opTokenId, provider)}}>Transfer</button>
@@ -288,7 +288,7 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
 
 
 /*
-<div className="input-group">
+<div className="input-group-mod">
 <label htmlFor="unitengaged">Unit Engaged</label>
 
 </div>
@@ -296,7 +296,7 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
 
 
 
-<div className ="input-group">
+<div className ="input-group-mod">
   <label htmlFor="reportlink">Report Link</label>
   <input type="text" id="reportlink" name="reportlink" />
   <button type="button" className='add-modify-button'>Save</button>

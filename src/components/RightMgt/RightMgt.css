@@ -16,27 +16,27 @@
     border-radius: 8px;
 }
 
-.title-part {
+.subtitle-part {
     color: #241e1e;
     font-size: 0.95rem;
     padding: 0.5rem;
 }
 /* Style the button group */
-.input-group {
+.input-group-right {
     margin-bottom: 1rem;
     display: flex;
     align-items: center;
 }
 
 /* Style labels */
-.input-group label{
+.input-group-right label{
     /* Add space below labels */
     flex-grow: 1;
     margin-left: 130px;
     color: #0e0c0c;
 }
 
-.input-group input[type=text] {
+.input-group-right input[type=text] {
     flex-shrink: 0;
     padding: 0.5rem;
     height: auto;

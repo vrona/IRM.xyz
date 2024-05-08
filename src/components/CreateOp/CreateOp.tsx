@@ -134,6 +134,9 @@ const createOperation = async (
           <div className ="form-container">
             <h2>Create Operation</h2>
             <form id="operation-form">
+
+              <div className="cotitle-container">
+
               <div className ="form-group">
                 <label htmlFor="opName">Operation Name</label>
                 <input type="text" id="opName" name="opName" value={opNameValue}
@@ -163,9 +166,12 @@ const createOperation = async (
               </div>
             <button type="button" className='create-operation-button' onClick={() => {
               if (secretClassification !== null) {createOperation(opNameValue, secretClassification, commanderNameValue, provider)} }}>Create Operation</button>
+            </div>
             </form>
             {showPopup && <PopUp message={popupMessage} onClose={() => setShowPopup(false)} />}
           </div>
+    
+          
         )}
       </Connect>
   )
