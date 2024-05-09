@@ -248,8 +248,8 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
             <h4 className="title-part">Modification ONLY</h4>
 
              <div className ="input-group-mod">
-                <label htmlFor="opSecretClass">Secret Classification</label>
-                <select id="opSecretClass" name="opSecretClass" value={secretClassification !== null ? secretClassification.toString():""}
+                <label htmlFor="opModSecretClass">Secret Classification</label>
+                <select id="opModSecretClass" name="opModSecretClass" value={secretClassification !== null ? secretClassification.toString():""}
                 onChange={(e) => {
                   const selectedValue = e.target.value;
                     if (selectedValue === "") {
