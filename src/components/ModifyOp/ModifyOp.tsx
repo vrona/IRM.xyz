@@ -285,20 +285,3 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
       </Connect>
   )
 }
-
-
-/*
-<div className="input-group-mod">
-<label htmlFor="unitengaged">Unit Engaged</label>
-
-</div>
-
-
-
-
-<div className ="input-group-mod">
-  <label htmlFor="reportlink">Report Link</label>
-  <input type="text" id="reportlink" name="reportlink" />
-  <button type="button" className='add-modify-button'>Save</button>
-</div>
-*/
