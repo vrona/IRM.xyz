@@ -7,6 +7,7 @@ import { Connect } from '../../components/Connect';
 import { CreateOp } from '../../components/CreateOp';
 import { ModifyOp } from '../../components/ModifyOp';
 import { RightMgt } from '../../components/RightMgt';
+import { ConsultOp } from '../../pages/ConsultOp';
 
 interface MajorProps {
   provider: BrowserProvider;
@@ -25,17 +26,10 @@ export const Major: React.FC<MajorProps> = () => {
           transform: location.pathname === '/conn/major' ? 'translate(-50%, -50%)' : 'none' }}>
           <h1> MAJOR</h1>
           <div className='subtitle'> 
-          <h3>
-          <NavLink to="/conn/major/rightsmgt">manages rights</NavLink>
-          </h3>
-
-          <h3>
-          <NavLink to="/conn/major/createop">creates operations</NavLink>
-          </h3>
-    
-          <h3>
-          <NavLink to="/conn/major/modifop">activates/modifies operations</NavLink>
-          </h3>
+          <h3><NavLink to="/conn/major/rightsmgt">manages rights</NavLink></h3>
+          <h3><NavLink to="/conn/major/createop">creates operations</NavLink></h3>
+          <h3><NavLink to="/conn/major/modifop">activates/modifies operations</NavLink></h3>
+          <h3><NavLink to="/conn/major/consult">consults reports</NavLink></h3>
           </div>
           </div>
 
@@ -44,6 +38,7 @@ export const Major: React.FC<MajorProps> = () => {
           <Route path='/rightsmgt' element = {<RightMgt provider={provider} />} />
           <Route path='/createop' element = {<CreateOp provider={provider}/>} />
           <Route path='/modifop' element = {<ModifyOp provider={provider} />} />
+          <Route path='/consult' element = {<ConsultOp provider={provider} />} />
         </Routes>
       </div>
 

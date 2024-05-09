@@ -19,46 +19,20 @@ const HamburgerMenu = ({ isOpen, toggleMenu }: { isOpen: boolean, toggleMenu: ()
         <div className="menu-line"></div>
       <div className={`menu-items ${isOpen ? 'open' : ''}`}>
         <dt>
-
-          <dd>
-            <NavLink to='/conn/whathow'> What_How </NavLink>
-          </dd>
-
-          <dd>
-            <NavLink to="/conn/major">Major</NavLink>
+          <dd><NavLink to='/conn/whathow'> What_How </NavLink></dd>
+          <dd><NavLink to="/conn/major">Major</NavLink>
             <dt className="submenu">
-              {/* <dd>
-                <NavLink to="/conn/major">Major</NavLink>
-              </dd> */}
-
-                <dt>
-
-                  <dd>
-                    <NavLink to="/conn/major/rightsmgt">Rights_Management</NavLink>
-                  </dd>
-
-                  
-                  <dd>
-                    <NavLink to="/conn/major/createop">Create_Operation</NavLink>
-                  </dd>
-
-                  <dd>
-                    <NavLink to="/conn/major/modifop">Operation_Details</NavLink>
-                  </dd>
-
-                </dt>
-
+              <dt>
+                <dd><NavLink to="/conn/major/rightsmgt">Rights_Management</NavLink></dd>
+                <dd><NavLink to="/conn/major/createop">Create_Operation</NavLink></dd>
+                <dd><NavLink to="/conn/major/modifop">Operation_Details</NavLink></dd>
+                <dd><NavLink to="/conn/major/consult">Documents_Access</NavLink></dd>
+              </dt>
             </dt>
           </dd>
-          <dd>
-            <NavLink to="/conn/umission">UMission</NavLink>
-          </dd>
-          <dd>
-            <NavLink to="/conn/hmission">HMission</NavLink>
-          </dd>
-          <dd>
-            <NavLink to="/conn/dmission">DMission</NavLink>
-          </dd>
+            <dd><NavLink to="/conn/umission">UMission</NavLink></dd>
+          <dd><NavLink to="/conn/hmission">HMission</NavLink></dd>
+          <dd><NavLink to="/conn/dmission">DMission</NavLink></dd>
           {/* <dd>
             <NavLink to="/conn/askaccess">Ask Access</NavLink>
           </dd> */}
@@ -93,7 +67,7 @@ return (
 
         <Routes>
         <Route path="/whathow" element={<WhatHow/>} />
-        <Route path="/major/*" element={<Major path="/conn" provider={provider} />} />
+        <Route path="/major/*" element={<Major provider={provider} />} />
         <Route path="/umission" element={<UMission />} />
         <Route path="/dmission" element={<DMission />} />
         <Route path="/hmission" element={<HMission />} />
