@@ -1,27 +1,28 @@
 import React,{ useEffect, useState } from 'react';
 import { BrowserProvider } from 'ethers';
-import { Route, Routes, NavLink} from 'react-router-dom';
+import { Route, Routes, NavLink, useLocation} from 'react-router-dom';
 import './Major.css';
 
 import { Connect } from '../../components/Connect';
 import { CreateOp } from '../../components/CreateOp';
 import { ModifyOp } from '../../components/ModifyOp';
 import { RightMgt } from '../../components/RightMgt';
-import { Cube } from '../../components/Cube';
 
 interface MajorProps {
   provider: BrowserProvider;
-  path: string;
 }
-export const Major: React.FC<MajorProps> = ({ path }) => {
-
+export const Major: React.FC<MajorProps> = () => {
+  const location = useLocation();
   return (
 
   <Connect>
     {(account: string, provider: BrowserProvider) =>(
 
         <div>
-          <div className='title'>
+          <div className='title'style={{ position: location.pathname === '/conn/major' ? 'relative' : 'absolute',
+          top: location.pathname === '/conn/major' ? '50%' : '400px',
+          left: location.pathname === '/conn/major' ? '50%' : '200px',
+          transform: location.pathname === '/conn/major' ? 'translate(-50%, -50%)' : 'none' }}>
           <h1> MAJOR</h1>
           <div className='subtitle'> 
           <h3>
