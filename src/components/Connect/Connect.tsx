@@ -8,7 +8,7 @@ import { createFhevmInstance } from '../../fhevmjs';
 const AUTHORIZED_CHAIN_ID = ['0x1f49', '0x1f4a', '0x1f4b', '0x2328'];
 
 export const Connect: React.FC<{
-  children: (account: string, provider: any) => React.ReactNode; // , requestTransactionApproval: (transaction: TransactionRequest)=> void
+  children: (account: string, provider: any) => React.ReactNode;
 }> = ({ children }) => {
   const [connected, setConnected] = useState(false);
   const [validNetwork, setValidNetwork] = useState(false);
@@ -104,24 +104,6 @@ export const Connect: React.FC<{
     await refreshNetwork();
   }, [refreshNetwork]);
 
-  // const requestTransactionApproval = async (transaction: TransactionRequest) => {
-  //   if (!provider) {
-  //     // Handle the case when the provider is not available
-  //     return;
-  //   }
-    
-  //   try {
-  //     // Request transaction approval from MetaMask
-  //     const response = await provider.send('eth_sendTransaction', [transaction]);
-      
-  //     // Handle the response if needed
-  //     console.log('Transaction sent:', response);
-  //   } catch (error) {
-  //     // Handle error if transaction approval fails
-  //     console.error('Error sending transaction:', error);
-  //   }
-  // };
-
   const child = useMemo<React.ReactNode>(() => {
     if (!account || !provider) {
       return null;
@@ -140,7 +122,7 @@ export const Connect: React.FC<{
       );
     }
 
-    return children(account, provider); // , requestTransactionApproval
+    return children(account, provider);
   }, [account, provider, validNetwork, children, switchNetwork]);
 
   if (error) {
@@ -153,8 +135,10 @@ export const Connect: React.FC<{
         <button className="Connect__button" onClick={connect}>
           ID Recognition
         </button>
+      )}{connected && (
+        <div className="Connect__circle" style={{ background: '#334558'}}></div>
       )}
-      {connected && <div className="Connect__account">Connected with {account}</div>}
+      
     </div>
   );
 
@@ -165,3 +149,5 @@ export const Connect: React.FC<{
     </>
   );
 };
+
+{/* {connected && <div className="Connect__account">Connected with {account}</div>} */}
