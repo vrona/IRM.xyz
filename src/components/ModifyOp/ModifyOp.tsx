@@ -176,13 +176,13 @@ export const ModifyOp: React.FC<ModifyOpProps> = ({provider}) => {
             <h4 className="title-part">Operation</h4>
 
             <div className ="input-group-mod">
-              <label htmlFor="opID">Operation ID</label>
-              <input type="number" id="opID" name="opID" value={opTokenId} onChange={(e) => inputOpTokenId(Number(e.target.value))} placeholder="Insert ID"/>
+              <label htmlFor="opID">Operation ID*</label>
+              <input type="number" id="opID" name="opID" value={opTokenId} onChange={(e) => inputOpTokenId(Number(e.target.value))} placeholder="Insert ID - mandatory"/>
               <button type="button" className='add-modify-button' onClick={() => opTokenId}>Save</button>
             </div>
             <div className ="input-group-mod">
               <label htmlFor="opCodeID">Secret Activation</label>
-              <input type="number" id="opCodeID" name="opCodeID" value={opCodeActive} onChange={(e) => inputOpCodeActive(Number(e.target.value))} placeholder="Insert Code"/>
+              <input type="number" id="opCodeID" name="opCodeID" value={opCodeActive} onChange={(e) => inputOpCodeActive(Number(e.target.value))} placeholder="Insert Code - once"/>
               <button type="button" className='add-modify-button' onClick={() => {if (opTokenId !== undefined && opCodeActive !== undefined) secretActiveCode(opTokenId, opCodeActive, provider)}}>Activate</button>
             </div>
             <div className ="input-group-mod">

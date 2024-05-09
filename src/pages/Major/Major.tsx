@@ -25,7 +25,7 @@ export const Major: React.FC<MajorProps> = ({ path }) => {
           <h1> MAJOR</h1>
           <div className='subtitle'> 
           <h3>
-          <NavLink to="/conn/major/rightsmgt">manages right</NavLink>
+          <NavLink to="/conn/major/rightsmgt">manages rights</NavLink>
           </h3>
 
           <h3>
@@ -33,7 +33,7 @@ export const Major: React.FC<MajorProps> = ({ path }) => {
           </h3>
     
           <h3>
-          <NavLink to="/conn/major/modifop">activate/modify operations</NavLink>
+          <NavLink to="/conn/major/modifop">activates/modifies operations</NavLink>
           </h3>
           </div>
           </div>
